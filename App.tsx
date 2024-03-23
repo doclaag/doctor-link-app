@@ -1,12 +1,12 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { GetStartedScreen } from './src/presentation/screens';
+import { GetStartedScreen, WelcomeScreen } from './src/presentation/screens';
 
 
 const App = (): React.JSX.Element => {
   return (
     <SafeAreaView style={ styles.container }>
-      <GetStartedScreen />
+      <WelcomeScreen />
     </SafeAreaView>
   );
 };

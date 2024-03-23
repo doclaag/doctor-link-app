@@ -2,12 +2,14 @@ import { Pressable, StyleSheet, Text } from 'react-native';
 
 interface PrimaryButtonProps {
   label: string;
+  marginTop?: number;
+  backgroundColor?: string;
 }
 
 
-export const PrimaryButtonShared = ( { label }: PrimaryButtonProps ) => {
+export const PrimaryButtonShared = ( { label, marginTop = 20, backgroundColor = '#36CFC9' }: PrimaryButtonProps ) => {
   return (
-    <Pressable style={ styles.button }>
+    <Pressable style={ [styles.button, {marginTop: marginTop, backgroundColor:backgroundColor}] }>
       <Text style={ styles.buttonText }>{ label }</Text>
     </Pressable>
   );
