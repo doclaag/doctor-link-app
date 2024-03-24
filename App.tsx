@@ -2,12 +2,21 @@ import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
 import { GetStartedScreen } from './src/presentation/screens';
 
+import { PaperProvider } from 'react-native-paper';
+
+import IonIcons from 'react-native-vector-icons/Ionicons';
 
 const App = (): React.JSX.Element => {
   return (
-    <SafeAreaView style={ styles.container }>
-      <GetStartedScreen />
-    </SafeAreaView>
+    <PaperProvider
+      settings={ {
+        icon: ( props ) => <IonIcons { ...props } />,
+      } }
+    >
+      <SafeAreaView style={ styles.container }>
+        <GetStartedScreen />
+      </SafeAreaView>
+    </PaperProvider>
   );
 };
 
@@ -15,7 +24,7 @@ const styles = StyleSheet.create( {
   container: {
     flex: 1,
     backgroundColor: '#F3F4F6',
-   },
-});
+  },
+} );
 
 export default App;

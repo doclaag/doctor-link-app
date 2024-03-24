@@ -1,20 +1,11 @@
-import { Image, StyleSheet } from 'react-native';
+import { Image } from 'react-native';
+import { globalStyles } from '../../theme/global.styles';
 
 export const LogoShared = () => {
   return (
     <Image
       source={ require( '../../../assets/img/doctor-link.jpg' ) }
-      style={ styles.image }
+      style={ globalStyles.image }
     />
   );
 };
-
-const styles = StyleSheet.create( {
-  image: {
-    width: 150,
-    height: 150,
-    marginBottom: 20,
-    borderRadius: 10,
-    alignSelf: 'center',
-  },
-} );

@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { View } from 'react-native';
 import { LogoShared, TitleShared } from '../components';
+import { globalStyles } from '../theme';
 
-export const WelcomeScreen = ( ) => {
+export const WelcomeScreen = () => {
   return (
     <>
-      <View style={ styles.content }>
+      <View style={ globalStyles.centerContainer }>
         <LogoShared />
         <TitleShared
           label={ 'Doctor' }
@@ -16,15 +17,3 @@ export const WelcomeScreen = ( ) => {
     </>
   );
 };
-
-
-const styles = StyleSheet.create( {
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  imageContainer: {
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-} );
