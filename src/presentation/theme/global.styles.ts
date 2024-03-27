@@ -6,6 +6,7 @@ const colors = {
   tertiary: '#374151',
   white: '#fff',
   red: 'red',
+  modalBackground: 'rgba(0, 0, 0, 0.5)',
 };
 
 const sizes = {
@@ -56,7 +57,7 @@ export const globalStyles = StyleSheet.create({
     marginTop: sizes.textInputMargin,
     borderRadius: sizes.borderRadius,
     borderTopEndRadius: sizes.borderRadius,
-    borderTopLeftRadius: sizes.borderRadius,
+    borderTopStartRadius: sizes.borderRadius,
   },
   passwordContainer: {
     flexDirection: 'row',
@@ -70,4 +71,45 @@ export const globalStyles = StyleSheet.create({
   errorText: {
     color: colors.red,
   },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: sizes.textInputMargin,
+  },
+  genderInput: {
+    width: '90%',
+    height: sizes.image / 3, 
+    justifyContent: 'center',
+    paddingHorizontal: sizes.textInputPadding,
+    marginBottom: sizes.textInputMargin,
+  },
+  termsText: {
+    color: colors.tertiary,
+    marginLeft: sizes.textInputPadding,
+  },
+  accountText: {
+    marginTop: sizes.textInputMargin,
+    color: colors.tertiary,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.modalBackground,
+  },
+  modalContent: {
+    backgroundColor: colors.white,
+    padding: sizes.textInputPadding * 2,
+    borderRadius: 25,
+    width: '80%',
+  },
+  modalOption: {
+    paddingVertical: sizes.textInputPadding,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.tertiary,
+  },
+  modalCloseButton: {
+    marginTop: sizes.textInputMargin,
+    alignItems: 'center',
+  }
 });
