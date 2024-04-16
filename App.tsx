@@ -1,22 +1,26 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { GetStartedScreen, SignInScreen, SignUpScreen, WelcomeScreen } from './src/presentation/screens';
 
+import 'react-native-gesture-handler';
+import { NavigationContainer } from '@react-navigation/native';
 import { PaperProvider } from 'react-native-paper';
-
 import IonIcons from 'react-native-vector-icons/Ionicons';
+
+import { SideMenuNavigator, StackNavigator } from './src/presentation/routes';
 
 const App = (): React.JSX.Element => {
   return (
+    <NavigationContainer>
     <PaperProvider
       settings={ {
         icon: ( props ) => <IonIcons { ...props } />,
       } }
-    >
+      >
       <SafeAreaView style={ styles.container }>
-        <SignUpScreen />
+        <SideMenuNavigator/>
       </SafeAreaView>
     </PaperProvider>
+      </NavigationContainer>
   );
 };
 

@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-const colors = {
+export const globalColors = {
   primary: '#36CFC9',
   secondary: '#6D28D9',
   tertiary: '#374151',
@@ -28,19 +28,19 @@ export const globalStyles = StyleSheet.create({
   title: {
     textAlign: 'center',
     fontSize: sizes.title,
-    color: colors.primary,
+    color: globalColors.primary,
     fontWeight: '600',
   },
   title_bold: {
     textAlign: 'center',
     fontSize: sizes.title,
-    color: colors.secondary,
+    color: globalColors.secondary,
     fontWeight: '900',
   },
   subtitle: {
     textAlign: 'center',
     fontSize: sizes.subtitle,
-    color: colors.tertiary,
+    color: globalColors.tertiary,
   },
   image: {
     width: sizes.image,
@@ -51,7 +51,7 @@ export const globalStyles = StyleSheet.create({
   },
   textInput: {
     width: '90%',
-    backgroundColor: colors.white,
+    backgroundColor: globalColors.white,
     paddingHorizontal: sizes.textInputPadding,
     marginBottom: sizes.textInputMargin,
     marginTop: sizes.textInputMargin,
@@ -65,11 +65,11 @@ export const globalStyles = StyleSheet.create({
     marginBottom: sizes.textInputMargin,
   },
   fab: {
-    backgroundColor: colors.primary,
+    backgroundColor: globalColors.primary,
     marginTop: sizes.fabMargin,
   },
   errorText: {
-    color: colors.red,
+    color: globalColors.red,
   },
   checkboxContainer: {
     flexDirection: 'row',
@@ -84,21 +84,21 @@ export const globalStyles = StyleSheet.create({
     marginBottom: sizes.textInputMargin,
   },
   termsText: {
-    color: colors.tertiary,
+    color: globalColors.tertiary,
     marginLeft: sizes.textInputPadding,
   },
   accountText: {
     marginTop: sizes.textInputMargin,
-    color: colors.tertiary,
+    color: globalColors.tertiary,
   },
   modalContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: colors.modalBackground,
+    backgroundColor: globalColors.modalBackground,
   },
   modalContent: {
-    backgroundColor: colors.white,
+    backgroundColor: globalColors.white,
     padding: sizes.textInputPadding * 2,
     borderRadius: 25,
     width: '80%',
@@ -106,7 +106,7 @@ export const globalStyles = StyleSheet.create({
   modalOption: {
     paddingVertical: sizes.textInputPadding,
     borderBottomWidth: 1,
-    borderBottomColor: colors.tertiary,
+    borderBottomColor: globalColors.tertiary,
   },
   modalCloseButton: {
     marginTop: sizes.textInputMargin,
