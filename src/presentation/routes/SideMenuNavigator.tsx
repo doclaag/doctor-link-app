@@ -4,6 +4,7 @@ import { StackNavigator  } from './';
 import { WelcomeScreen } from '../screens';
 import { globalColors } from '../theme/global.styles';
 import { LogoShared } from '../components';
+import { AppoinmentsDoctorScreen } from '../screens/AppointmentsDoctorScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -29,7 +30,8 @@ export const SideMenuNavigator = () =>  {
       }}
     >
       <Drawer.Screen name="StackNavigator" component={StackNavigator} />
-      <Drawer.Screen name="Welcome" component={WelcomeScreen} />
+      <Drawer.Screen name="Inicio" component={WelcomeScreen} />
+      <Drawer.Screen name="Citas" component={AppoinmentsDoctorScreen} />
     </Drawer.Navigator>
   );
 }
