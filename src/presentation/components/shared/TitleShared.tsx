@@ -16,3 +16,4 @@ export const TitleShared = ( { label, labelBold, subtitle }: TitleProps ) => (
     <Text style={ globalStyles.subtitle }>{ subtitle }</Text>
   </>
 );
+
