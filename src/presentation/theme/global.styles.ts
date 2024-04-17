@@ -11,6 +11,7 @@ export const globalColors = {
 
 const sizes = {
   title: 50,
+  title_little: 30,
   subtitle: 20,
   image: 150,
   textInputPadding: 8,
@@ -36,6 +37,18 @@ export const globalStyles = StyleSheet.create({
     fontSize: sizes.title,
     color: globalColors.secondary,
     fontWeight: '900',
+  },
+  title_little: {
+    textAlign: 'center',
+    fontSize: sizes.title_little,
+    color: globalColors.primary,
+    fontWeight: '400',
+  },
+  title_bold_little: {
+    textAlign: 'center',
+    fontSize: sizes.title_little,
+    color: globalColors.secondary,
+    fontWeight: '500',
   },
   subtitle: {
     textAlign: 'center',
