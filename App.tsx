@@ -1,6 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { GetStartedScreen, SignInScreen, SignUpScreen, WelcomeScreen } from './src/presentation/screens';
+import { GetStartedScreen, SignInScreen, SignUpScreen, WelcomeScreen, EditPersonalInformation } from './src/presentation/screens';
 
 import { PaperProvider } from 'react-native-paper';
 
@@ -14,7 +14,7 @@ const App = (): React.JSX.Element => {
       } }
     >
       <SafeAreaView style={ styles.container }>
-        <SignUpScreen />
+        <EditPersonalInformation />
       </SafeAreaView>
     </PaperProvider>
   );
