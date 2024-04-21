@@ -1,9 +1,8 @@
-import { useWindowDimensions, View } from 'react-native';
+import { useWindowDimensions, View, Image } from 'react-native';
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { StackNavigator  } from './';
 import { SearchScreen, WelcomeScreen } from '../screens';
-import { globalColors } from '../theme/global.styles';
-import { LogoShared } from '../components';
+import { globalColors, globalStyles } from '../theme/global.styles';
 import { AppoinmentsDoctorScreen } from '../screens/AppointmentsDoctorScreen';
 
 const Drawer = createDrawerNavigator();
@@ -32,8 +31,7 @@ export const SideMenuNavigator = () =>  {
       <Drawer.Screen name="StackNavigator" component={StackNavigator} />
       <Drawer.Screen name="Inicio" component={WelcomeScreen} />
       <Drawer.Screen name="Citas" component={AppoinmentsDoctorScreen} />
-      <Drawer.Screen name="Welcome" component={WelcomeScreen} />
-      <Drawer.Screen name="Search" component={SearchScreen} />
+      <Drawer.Screen name="Buscar" component={SearchScreen} />
     </Drawer.Navigator>
   );
 }
@@ -51,7 +49,12 @@ const CustomDrawerContent = ( props: DrawerContentComponentProps ) => {
           justifyContent: 'center',
         }}
         >
-          <LogoShared />
+
+          <Image
+            source={ require( '../../assets/img/user.png' ) }
+            style={ globalStyles.image}
+          />
+
           </View>
 
         <DrawerItemList { ...props } />
