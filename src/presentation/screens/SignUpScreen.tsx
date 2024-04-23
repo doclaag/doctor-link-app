@@ -16,7 +16,6 @@ export const SignUpScreen = () => {
   const [ user, setUser ] = useState( '' );
   const [ phone, setPhone ] = useState( '' );
   const [ noDPI, setNoDPI ] = useState( '' );
-  const [ isActive, setIsActive ] = useState( false );
   const [ provedTerms, setProvedTerms ] = useState( false );
   const [ visibleModal, setVisibleModal ] = useState( false );
   const [ password, setPassword ] = useState( '' );
