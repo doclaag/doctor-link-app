@@ -1,13 +1,25 @@
-import React, { useEffect, useState } from 'react';
-import { Pressable, View, StyleSheet } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Pressable, View, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { FAB, Text, Searchbar } from 'react-native-paper';
-import { Image } from 'react-native';
+import { globalColors } from '../theme';
+import { URL_PATIENT_APPOINTMENTS } from '@env';
 import { TitleSharedLittle } from '../components/shared/TitleSharedLittle';
+
+interface Appoinments_Patient{
+  nombre: string;
+  observation: string;
+  doctor: string;
+  patient: string;
+  time: string;
+}
 
 export const AppoinmentsDoctorScreen = () => {
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
+   const [allDoctors, setAllDoctors] = useState<Appoinments_Patient[]>([]);
+  const [ doctors, setDoctors ] = useState<Appoinments_Patient[]>( [] );
+  const [ page, setPage ] = useState( 1 );
 
   useEffect(() => {
     navigation.setOptions({
@@ -18,28 +30,67 @@ export const AppoinmentsDoctorScreen = () => {
       ),
     });
   }, []);
+  // Función para filtrar las citas por nombre
+  const filterAppointments = (query: string) => {
+    return allDoctors.filter((doctor) =>
+      doctor.nombre.toLowerCase().includes(query.toLowerCase())
+    );
+  };
+
+  // Función para manejar el cambio en el campo de búsqueda
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setPage(1); 
+    setDoctors(filterAppointments(query)); 
+  };
+
+  const consultAPI = useCallback( async ( page: number ) => {
+    try {
+      const response = await fetch( `${ URL_PATIENT_APPOINTMENTS }?page=${ page }&limit=8` );
+      const data: Appoinments_Patient[] = await response.json();
+      setDoctors( prevDoctors => [ ...prevDoctors, ...data ] );
+    } catch ( error ) {
+      console.error( error );
+    }
+  }, [] );
+  useEffect( () => {
+    consultAPI( page );
+  }, [ consultAPI, page ] );
+
+   useEffect(() => {
+    setDoctors(filterAppointments(searchQuery));
+  }, [allDoctors, searchQuery]);
+
+
+  const handleScroll = ( event: { nativeEvent: { contentOffset: { y: number; }; layoutMeasurement: { height: number; }; contentSize: { height: number; }; }; } ) => {
+    if ( event.nativeEvent.contentOffset.y + event.nativeEvent.layoutMeasurement.height >= event.nativeEvent.contentSize.height ) {
+      setPage( prevPage => prevPage + 1 );
+    }
+  };
 
   return (
     <>
       <View style={styles.container}>
-        <TitleSharedLittle
-          label={'Doctor Link, '}
-          labelBold={'Citas'}
-        />
+        <TitleSharedLittle label={'Doctor Link, '} labelBold={'Citas'} />
         <Searchbar
           placeholder="Busca tu cita..."
-          onChangeText={setSearchQuery}
+          onChangeText={handleSearch} // Modificar para llamar a la función handleSearch
           value={searchQuery}
           icon={'search-circle-outline'}
-          style={{marginTop: 15}}
+          style={{ marginTop: 15 }}
         />
-        <PersonTag 
-        linea="-------------------------------------------------------------------------------------------"
-        name="Nombre de la Cita" 
-        description="Descripción de la cita. " 
-        horario="Horario de la cita. "
-        nota="DATOS GENERADOS DE LA API."
-      />
+        <ScrollView style={styles.scrollView} onScroll={handleScroll}>
+          {doctors.map((doctor, index) => (
+            <PersonTag
+              key={index} 
+              name={`${doctor.nombre}`}
+              observation={doctor.observation}
+              doctor={doctor.doctor}
+              patient={doctor.patient}
+              time={doctor.time}
+            />
+          ))}
+        </ScrollView>
       </View>
       <View style={styles.bottomContainer}>
         <FAB
@@ -52,21 +103,21 @@ export const AppoinmentsDoctorScreen = () => {
     </>
   );
 };
-const PersonTag = ({ name, description, horario, nota, linea }: { 
+const PersonTag = ({ name, observation, doctor, time, patient }: { 
   name: string; 
-  description: string; 
-  horario: string;
-  nota: string; 
-  linea: string; 
+  observation: string; 
+  doctor: string; 
+  patient: string;
+  time: string; 
 }) => {
   return (
     <View style={styles.personContainer}>
       <View style={styles.textContainer}>
         <Text style={styles.name}>{name}</Text>
-        <Text style={styles.description}>{description}</Text>
-        <Text style={styles.description}>{horario}</Text>
-        <Text style={styles.name}>{nota}</Text>
-        <Text style={styles.description}>{linea}</Text>
+        <Text style={styles.description}>{observation}</Text>
+        <Text style={styles.description}>{time}</Text>
+        <Text style={styles.name}>{doctor}</Text>
+        <Text style={styles.name}>{patient}</Text>
       </View>
     </View>
   );
@@ -79,6 +130,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
   },
+   personContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+    borderWidth: 1, 
+    borderColor: 'lightgray', 
+    borderRadius: 5, 
+    padding: 10, 
+    backgroundColor: globalColors.skyblue, 
+  },
   bottomContainer: {
     position: 'absolute',
     bottom: 20,
@@ -87,11 +148,6 @@ const styles = StyleSheet.create({
   },
   fabButton: {
     backgroundColor: 'red',
-  },
-    personContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
   },
   textContainer: {
     flex: 1,
@@ -107,5 +163,8 @@ const styles = StyleSheet.create({
   location: {
     fontSize: 14,
     color: 'gray',
+  },
+    scrollView: {
+    width: '100%',
   },
 });
