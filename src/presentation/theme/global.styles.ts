@@ -10,6 +10,7 @@ export const globalColors = {
   gris: '#9b9b9b',
   red: 'red',
   black: '#000',
+  skyblue: '#A0D9EF',
   modalBackground: 'rgba(0, 0, 0, 0.5)',
 };
 
