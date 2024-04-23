@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, ScrollView, Button } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { globalColors, globalStyles } from '../theme';
 import { URL_DOCTORS } from '@env';
@@ -18,10 +18,12 @@ export const SearchScreen = () => {
   const [ searchQuery, setSearchQuery ] = useState( '' );
   const [ doctors, setDoctors ] = useState<Doctor[]>( [] );
   const [ page, setPage ] = useState( 1 );
+  const [ searchPressed, setSearchPressed ] = useState( false );
 
-  const consultAPI = useCallback( async ( page: number ) => {
+
+  const consultAPI = useCallback( async ( page: number, query: string ) => {
     try {
-      const response = await fetch( `${ URL_DOCTORS }?page=${ page }&limit=8` );
+      const response = await fetch( `${ URL_DOCTORS }?page=${ page }&limit=8&query=${ query }` );
       const data: Doctor[] = await response.json();
       setDoctors( prevDoctors => [ ...prevDoctors, ...data ] );
     } catch ( error ) {
@@ -31,8 +33,15 @@ export const SearchScreen = () => {
   }, [] );
 
   useEffect( () => {
-    consultAPI( page );
+    consultAPI( page, searchQuery );
   }, [ consultAPI, page ] );
+
+  useEffect( () => {
+    if ( searchPressed ) {
+      consultAPI( page, searchQuery );
+      setSearchPressed( false );
+    }
+  }, [ consultAPI, page, searchPressed ] );
 
   const handleScroll = ( event: { nativeEvent: { contentOffset: { y: number; }; layoutMeasurement: { height: number; }; contentSize: { height: number; }; }; } ) => {
     if ( event.nativeEvent.contentOffset.y + event.nativeEvent.layoutMeasurement.height >= event.nativeEvent.contentSize.height ) {
@@ -47,16 +56,16 @@ export const SearchScreen = () => {
 
       <Searchbar
         placeholder="Buscar doctor"
-        onChangeText={ text => {
-          setSearchQuery( text );
-          consultAPI( page );
-        } }
+        onChangeText={ setSearchQuery }
         value={ searchQuery }
         icon={ 'search-circle-outline' }
       />
 
       <ScrollView style={ styles.scrollView } onScroll={ handleScroll }>
-        { doctors.map( ( doctor, index ) => (
+        { doctors.filter( doctor => {
+          const fullName = `${ doctor.name } ${ doctor.last_name }`;
+          return fullName.toLowerCase().includes( searchQuery.toLowerCase() );
+        } ).map( ( doctor, index ) => (
           <View style={ globalStyles.cardContainer } key={ index }>
             <DoctorTagShared
               name={ `${ doctor.name } ${ doctor.last_name }` }
@@ -70,7 +79,6 @@ export const SearchScreen = () => {
     </View>
   );
 };
-
 
 const styles = StyleSheet.create( {
   container: {
