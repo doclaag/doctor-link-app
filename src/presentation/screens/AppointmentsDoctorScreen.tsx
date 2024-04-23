@@ -10,6 +10,7 @@ interface Appoinments_Patient{
   date: string;
   observation: string;
   time: string;
+  is_active: boolean; 
 }
 
 export const AppoinmentsDoctorScreen = () => {
@@ -44,7 +45,7 @@ export const AppoinmentsDoctorScreen = () => {
     consultAPI( page, searchQuery );
   }, [ consultAPI, page ] );
 
-   useEffect( () => {
+  useEffect( () => {
     if ( searchPressed ) {
       consultAPI( page, searchQuery );
       setSearchPressed( false );
@@ -78,6 +79,7 @@ export const AppoinmentsDoctorScreen = () => {
               date={`${doctor.date}`}
               observation={doctor.observation}
               time={doctor.time}
+              isActive={doctor.is_active} 
             />
           ))}
         </ScrollView>
@@ -93,21 +95,23 @@ export const AppoinmentsDoctorScreen = () => {
     </>
   );
 };
-const PersonTag = ({ date, observation, time }: { 
-  date: string; 
-  observation: string; 
-  time: string; 
-}) => {
-  return (
-    <View style={ globalStyles.cardContainer }>
-      <View style={styles.textContainer}>
-        <Text style={styles.fecha}>Fecha: {date}</Text>
-        <Text style={styles.description}>Observación: {observation}</Text>
-        <Text style={styles.time}>Horario: {time}</Text>
+  const PersonTag = ({ date, observation, time, isActive }: { 
+    date: string; 
+    observation: string; 
+    time: string; 
+    isActive: boolean; 
+  }) => {
+    return (
+      <View style={[globalStyles.cardContainer, isActive ? styles.active : styles.cancelled]}>
+        <View style={styles.textContainer}>
+          <Text style={styles.fecha}>Fecha: {date}</Text>
+          <Text style={styles.description}>Observación: {observation}</Text>
+          <Text style={styles.time}>Horario: {time}</Text>
+          <Text style={styles.status}>{isActive ? <Text>Pendiente</Text> : <Text>Cancelada</Text>}</Text>
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -142,5 +146,16 @@ const styles = StyleSheet.create({
   time:{
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  active: {
+    backgroundColor: 'green',
+  },
+  cancelled: {
+    backgroundColor: 'red',
+  },
+  status: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'right',
   }
-});
+});  
