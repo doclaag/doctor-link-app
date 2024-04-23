@@ -13,7 +13,6 @@ export const SignUpScreen = () => {
   const [ name, setName ] = useState( '' );
   const [ surname, setSurname ] = useState( '' );
   const [ gender, setGender ] = useState<Gender | null>( null );
-  const [ user, setUser ] = useState( '' );
   const [ phone, setPhone ] = useState( '' );
   const [ noDPI, setNoDPI ] = useState( '' );
   const [ provedTerms, setProvedTerms ] = useState( false );
@@ -30,12 +29,12 @@ export const SignUpScreen = () => {
   
   const consultAPI = useCallback(async () => {
     const obj = {
-      email,
-      password,
-      name,
+      email: email,
+      password: password,
+      name: name,
       last_name: surname,
-      gender,
-      phone,
+      gender: gender,
+      phone: phone,
       is_staff: false,
       is_active: true,
       no_dpi: noDPI,
@@ -149,10 +148,10 @@ export const SignUpScreen = () => {
           />
         </View>
 
-        <TouchableOpacity onPress={ () => setVisibleModal( true ) } style={ [ globalStyles.textInput, globalStyles.genderInput ] }>
-          <Text style={ { color: '#000' } }>{ gender ? gender : 'Escoge tu género...' }</Text>
+        <TouchableOpacity onPress={() => setVisibleModal(true)} style={[globalStyles.textInput, globalStyles.genderInput]}>
+          <Text style={{ color: '#000' }}>{gender === 0 ? 'Masculino' : gender === 1 ? 'Femenino' : 'Escoge tu género...'}</Text>
         </TouchableOpacity>
-
+        
         <Modal
           animationType="slide"
           transparent={ true }
@@ -173,17 +172,6 @@ export const SignUpScreen = () => {
             </View>
           </View>
         </Modal>
-
-        <TextInput
-          label="Usuario"
-          style={ globalStyles.textInput }
-          placeholder="Ingresa tu usuario..."
-          placeholderTextColor="#959393"
-          textColor='#000'
-          selectionColor="#959393"
-          onChangeText={ setUser }
-          value={ user }
-        />
 
         <TextInput
           label="Phone"
