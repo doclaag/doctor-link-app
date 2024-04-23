@@ -2,15 +2,13 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Pressable, View, StyleSheet, ScrollView } from 'react-native';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { FAB, Text, Searchbar } from 'react-native-paper';
-import { globalColors } from '../theme';
+import { globalColors, globalStyles } from '../theme';
 import { URL_PATIENT_APPOINTMENTS } from '@env';
 import { TitleSharedLittle } from '../components/shared/TitleSharedLittle';
 
 interface Appoinments_Patient{
-  nombre: string;
+  date: string;
   observation: string;
-  doctor: string;
-  patient: string;
   time: string;
 }
 
@@ -33,7 +31,7 @@ export const AppoinmentsDoctorScreen = () => {
   // Función para filtrar las citas por nombre
   const filterAppointments = (query: string) => {
     return allDoctors.filter((doctor) =>
-      doctor.nombre.toLowerCase().includes(query.toLowerCase())
+      doctor.observation.toLowerCase().includes(query.toLowerCase())
     );
   };
 
@@ -74,19 +72,16 @@ export const AppoinmentsDoctorScreen = () => {
         <TitleSharedLittle label={'Doctor Link, '} labelBold={'Citas'} />
         <Searchbar
           placeholder="Busca tu cita..."
-          onChangeText={handleSearch} // Modificar para llamar a la función handleSearch
+          onChangeText={handleSearch} 
           value={searchQuery}
           icon={'search-circle-outline'}
-          style={{ marginTop: 15 }}
         />
         <ScrollView style={styles.scrollView} onScroll={handleScroll}>
           {doctors.map((doctor, index) => (
             <PersonTag
               key={index} 
-              name={`${doctor.nombre}`}
+              date={`${doctor.date}`}
               observation={doctor.observation}
-              doctor={doctor.doctor}
-              patient={doctor.patient}
               time={doctor.time}
             />
           ))}
@@ -103,21 +98,17 @@ export const AppoinmentsDoctorScreen = () => {
     </>
   );
 };
-const PersonTag = ({ name, observation, doctor, time, patient }: { 
-  name: string; 
+const PersonTag = ({ date, observation, time }: { 
+  date: string; 
   observation: string; 
-  doctor: string; 
-  patient: string;
   time: string; 
 }) => {
   return (
-    <View style={styles.personContainer}>
+    <View style={ globalStyles.cardContainer }>
       <View style={styles.textContainer}>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.description}>{observation}</Text>
-        <Text style={styles.description}>{time}</Text>
-        <Text style={styles.name}>{doctor}</Text>
-        <Text style={styles.name}>{patient}</Text>
+        <Text style={styles.fecha}>Fecha: {date}</Text>
+        <Text style={styles.description}>Observación: {observation}</Text>
+        <Text style={styles.time}>Horario: {time}</Text>
       </View>
     </View>
   );
@@ -129,16 +120,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 20,
     paddingTop: 10,
-  },
-   personContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-    borderWidth: 1, 
-    borderColor: 'lightgray', 
-    borderRadius: 5, 
-    padding: 10, 
-    backgroundColor: globalColors.skyblue, 
   },
   bottomContainer: {
     position: 'absolute',
@@ -152,19 +133,19 @@ const styles = StyleSheet.create({
   textContainer: {
     flex: 1,
   },
-  name: {
+  fecha: {
     fontSize: 16,
     fontWeight: 'bold',
   },
   description: {
-    fontSize: 14,
-    color: 'gray',
-  },
-  location: {
-    fontSize: 14,
-    color: 'gray',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
     scrollView: {
     width: '100%',
   },
+  time:{
+    fontSize: 16,
+    fontWeight: 'bold',
+  }
 });
