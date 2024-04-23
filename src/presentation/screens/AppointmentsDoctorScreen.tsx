@@ -14,8 +14,9 @@ interface Appoinments_Patient{
 
 export const AppoinmentsDoctorScreen = () => {
   const navigation = useNavigation();
+  const [searchPressed, setSearchPressed ] = useState( false );
   const [searchQuery, setSearchQuery] = useState('');
-   const [allDoctors, setAllDoctors] = useState<Appoinments_Patient[]>([]);
+  const [allDoctors, setAllDoctors] = useState<Appoinments_Patient[]>([]);
   const [ doctors, setDoctors ] = useState<Appoinments_Patient[]>( [] );
   const [ page, setPage ] = useState( 1 );
 
@@ -28,36 +29,27 @@ export const AppoinmentsDoctorScreen = () => {
       ),
     });
   }, []);
-  // Función para filtrar las citas por nombre
-  const filterAppointments = (query: string) => {
-    return allDoctors.filter((doctor) =>
-      doctor.observation.toLowerCase().includes(query.toLowerCase())
-    );
-  };
 
-  // Función para manejar el cambio en el campo de búsqueda
-  const handleSearch = (query: string) => {
-    setSearchQuery(query);
-    setPage(1); 
-    setDoctors(filterAppointments(query)); 
-  };
-
-  const consultAPI = useCallback( async ( page: number ) => {
+  const consultAPI = useCallback( async ( page: number, query: string ) => {
     try {
-      const response = await fetch( `${ URL_PATIENT_APPOINTMENTS }?page=${ page }&limit=8` );
+      const response = await fetch( `${ URL_PATIENT_APPOINTMENTS }?page=${ page }&limit=8&query=${ query }` );
       const data: Appoinments_Patient[] = await response.json();
       setDoctors( prevDoctors => [ ...prevDoctors, ...data ] );
     } catch ( error ) {
       console.error( error );
     }
   }, [] );
+  
   useEffect( () => {
-    consultAPI( page );
+    consultAPI( page, searchQuery );
   }, [ consultAPI, page ] );
 
-   useEffect(() => {
-    setDoctors(filterAppointments(searchQuery));
-  }, [allDoctors, searchQuery]);
+   useEffect( () => {
+    if ( searchPressed ) {
+      consultAPI( page, searchQuery );
+      setSearchPressed( false );
+    }
+  }, [ consultAPI, page, searchPressed ] );
 
 
   const handleScroll = ( event: { nativeEvent: { contentOffset: { y: number; }; layoutMeasurement: { height: number; }; contentSize: { height: number; }; }; } ) => {
@@ -72,12 +64,15 @@ export const AppoinmentsDoctorScreen = () => {
         <TitleSharedLittle label={'Doctor Link, '} labelBold={'Citas'} />
         <Searchbar
           placeholder="Busca tu cita..."
-          onChangeText={handleSearch} 
+          onChangeText={setSearchQuery} 
           value={searchQuery}
           icon={'search-circle-outline'}
         />
         <ScrollView style={styles.scrollView} onScroll={handleScroll}>
-          {doctors.map((doctor, index) => (
+          { doctors.filter( doctor => {
+          const SearchObservation = `${ doctor.observation }`;
+          return SearchObservation.toLowerCase().includes( searchQuery.toLowerCase() );
+        } ).map( ( doctor, index ) => (
             <PersonTag
               key={index} 
               date={`${doctor.date}`}
