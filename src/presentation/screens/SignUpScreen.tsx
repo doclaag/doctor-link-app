@@ -42,7 +42,7 @@ export const SignUpScreen = () => {
     };
     try {
       const response = await axios.post(`${URL_PATIENTS}create/`, obj, { headers: { 'Content-Type': 'application/json' } });
-    } catch (error) {
+    } catch (error : any) {
       console.error(error.response);
     }
   }, [name, surname, gender, phone, noDPI, password, email]); 
