@@ -234,4 +234,34 @@ export const globalStyles = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
   },
+  modalContainer1: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent1: {
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    padding: 20,
+    borderRadius: 10,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalMessage: {
+    fontSize: 18,
+    marginBottom: 20,
+    color: globalColors.primary,
+    textAlign: 'center',
+  },
+  modalCloseButton1: {
+    marginTop: 10,
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 5,
+  },
+  modalCloseButtonText: {
+    fontSize: 16,
+    color: '#000',
+  },
+  
 });

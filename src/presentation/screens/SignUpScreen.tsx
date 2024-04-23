@@ -21,6 +21,8 @@ export const SignUpScreen = () => {
   const [ showPassword, setShowPassword ] = useState( false );
   const [ email, setEmail ] = useState( '' );
   const [ emailError, setEmailError ] = useState( '' );
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
 
   const toggleTerms = () => {
     setProvedTerms( !provedTerms );
@@ -41,8 +43,20 @@ export const SignUpScreen = () => {
     };
     try {
       const response = await axios.post(`${URL_PATIENTS}create/`, obj, { headers: { 'Content-Type': 'application/json' } });
+      setModalMessage('Usuario registrado correctamente');
+      setModalVisible(true);
+      setName('');
+      setSurname('');
+      setGender(null);
+      setPhone('');
+      setNoDPI('');
+      setPassword('');
+      setEmail('');
+      setProvedTerms(false);
     } catch (error : any) {
       console.error(error.response);
+      setModalMessage('Hubo un error al registrar el usuario');
+      setModalVisible(true);
     }
   }, [name, surname, gender, phone, noDPI, password, email]); 
   
@@ -151,7 +165,7 @@ export const SignUpScreen = () => {
         <TouchableOpacity onPress={() => setVisibleModal(true)} style={[globalStyles.textInput, globalStyles.genderInput]}>
           <Text style={{ color: '#000' }}>{gender === 0 ? 'Masculino' : gender === 1 ? 'Femenino' : 'Escoge tu género...'}</Text>
         </TouchableOpacity>
-        
+
         <Modal
           animationType="slide"
           transparent={ true }
@@ -204,6 +218,22 @@ export const SignUpScreen = () => {
           color={ '#000' }
           onPress={ handleRegister }
         />
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => setModalVisible(false)}
+        >
+          <View style={globalStyles.modalContainer1}>
+            <View style={globalStyles.modalContent1}>
+              <Text style={globalStyles.modalMessage}>{modalMessage}</Text>
+              <TouchableOpacity onPress={() => setModalVisible(false)} style={globalStyles.modalCloseButton1}>
+                <Text style={globalStyles.modalCloseButtonText}>Cerrar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+
 
         <Text style={ globalStyles.accountText }>¿Ya tienes cuenta?</Text>
 
