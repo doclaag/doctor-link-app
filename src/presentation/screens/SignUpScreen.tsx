@@ -7,7 +7,7 @@ import { globalStyles } from '../theme';
 import { URL_PATIENTS } from '@env';
 import axios from 'axios';
 
-type Gender = 'Masculino' | 'Femenino';
+type Gender = 0 | 1;
 
 export const SignUpScreen = () => {
   const [ name, setName ] = useState( '' );
@@ -28,38 +28,26 @@ export const SignUpScreen = () => {
     setProvedTerms( !provedTerms );
   };
 
-
+  
   const consultAPI = useCallback(async () => {
-    setIsActive(true);
     const obj = {
+      email,
+      password,
       name,
       last_name: surname,
       gender,
       phone,
+      is_staff: false,
+      is_active: true,
       no_dpi: noDPI,
-      is_active: isActive,
-      username: user,
-      password,
-      id: Math.floor(Math.random() * 1000000),
     };
     try {
-      const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(obj)
-      };
-  
-      const response = await axios.post(URL_PATIENTS, requestOptions.body, { headers: requestOptions.headers });
-  
-      console.log(response.data);
+      const response = await axios.post(`${URL_PATIENTS}create/`, obj, { headers: { 'Content-Type': 'application/json' } });
     } catch (error) {
-      console.error(error);
+      console.error(error.response);
     }
-  }, [name, surname, gender, phone, noDPI, isActive, user, password]);
-
-  useEffect( () => {
-    consultAPI();
-  }, [ consultAPI ] );
+  }, [name, surname, gender, phone, noDPI, password, email]); 
+  
 
   const handleRegister = () => {
     if ( !validateEmail( email ) ) {
@@ -68,7 +56,6 @@ export const SignUpScreen = () => {
     }
     consultAPI();
     setEmailError( '' );
-
   };
 
   const validateEmail = ( email: string ) => {
@@ -175,10 +162,10 @@ export const SignUpScreen = () => {
         >
           <View style={ globalStyles.modalContainer }>
             <View style={ globalStyles.modalContent }>
-              <TouchableOpacity onPress={ () => { setGender( 'Masculino' ); setVisibleModal( false ); } } style={ globalStyles.modalOption }>
+              <TouchableOpacity onPress={ () => { setGender( 0 ); setVisibleModal( false ); } } style={ globalStyles.modalOption }>
                 <Text style={ { color: '#000' } }>Masculino</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={ () => { setGender( 'Femenino' ); setVisibleModal( false ); } } style={ globalStyles.modalOption }>
+              <TouchableOpacity onPress={ () => { setGender( 1 ); setVisibleModal( false ); } } style={ globalStyles.modalOption }>
                 <Text style={ { color: '#000' } }>Femenino</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={ handleModalClose } style={ globalStyles.modalCloseButton }>
