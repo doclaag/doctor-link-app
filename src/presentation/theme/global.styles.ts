@@ -209,4 +209,19 @@ export const globalStyles = StyleSheet.create({
     fontSize: 14,
     color: 'gray',
   },
+  titleCard: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    color: globalColors.secondary,
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 20,
+    borderWidth: 1, 
+    borderColor: 'lightgray', 
+    borderRadius: 5, 
+    padding: 10, 
+    backgroundColor: globalColors.skyblue, 
+  },
 });

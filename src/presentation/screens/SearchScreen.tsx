@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView } from 'react-native';
 import { Searchbar } from 'react-native-paper';
-import { globalColors } from '../theme';
+import { globalColors, globalStyles } from '../theme';
 import { URL_DOCTORS } from '@env';
-import { PersonTagShared } from '../components';
+import { DoctorTagShared } from '../components';
 
 interface Doctor {
   name: string;
   last_name: string;
-  speciality: string[];
+  speciality: string;
   phone: string;
+  no_collegiate: string;
 }
 
 export const SearchScreen = () => {
@@ -25,6 +26,7 @@ export const SearchScreen = () => {
       setDoctors( prevDoctors => [ ...prevDoctors, ...data ] );
     } catch ( error ) {
       console.error( error );
+      // TODO: Handle error in a user-friendly way
     }
   }, [] );
 
@@ -45,24 +47,25 @@ export const SearchScreen = () => {
 
       <Searchbar
         placeholder="Buscar doctor"
-        onChangeText={ setSearchQuery }
+        onChangeText={ text => {
+          setSearchQuery( text );
+          consultAPI( page );
+        } }
         value={ searchQuery }
         icon={ 'search-circle-outline' }
-        style={ { marginTop: 15 } }
-        onPressIn={ () => consultAPI( page ) }
       />
 
       <ScrollView style={ styles.scrollView } onScroll={ handleScroll }>
         { doctors.map( ( doctor, index ) => (
-          <PersonTagShared
-            key={ doctor.name } // Consider using a unique identifier
-            name={ `${ doctor.name } ${ doctor.last_name }` }
-            description={ doctor.speciality[ 0 ] }
-            location={ doctor.phone }
-            imageSource={ require( '../../assets/img/doctor.png' ) } 
-          />
-        ) )
-        }
+          <View style={ globalStyles.cardContainer } key={ index }>
+            <DoctorTagShared
+              name={ `${ doctor.name } ${ doctor.last_name }` }
+              speciality={ doctor.speciality }
+              phone={ doctor.phone }
+              imageSource={ require( '../../assets/img/doctor.png' ) }
+            />
+          </View>
+        ) ) }
       </ScrollView>
     </View>
   );

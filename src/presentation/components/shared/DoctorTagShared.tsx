@@ -1,23 +1,31 @@
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { globalColors } from '../../theme';
+import { globalColors, globalStyles } from '../../theme';
 
-interface PersonTagProps {
+interface DoctorTagProps {
   name: string;
-  description: string;
-  location: string;
+  speciality: string;
+  phone: string;
   imageSource: any;
 }
 
-export const PersonTagShared = ( { name, description, location, imageSource }: PersonTagProps ) => {
+export const DoctorTagShared = ( { name, speciality, phone, imageSource }: DoctorTagProps ) => {
   return (
     <View style={ styles.personContainer }>
       <View style={ styles.imageContainer }>
         <Image source={ imageSource } style={ styles.image } />
       </View>
       <View style={ styles.textContainer }>
-        <Text style={ styles.name }>{ name }</Text>
-        <Text style={ styles.description }>{ description }</Text>
-        <Text style={ styles.location }>{ location }</Text>
+        <Text style={ styles.name }>
+          <Text style={globalStyles.titleCard}>Doctor: </Text> 
+          { name }
+        </Text>
+        <Text style={ styles.description }>
+          <Text style={globalStyles.titleCard}>Especialidad: </Text> 
+          { speciality }</Text>
+        <Text style={ styles.phone }>
+          <Text style={globalStyles.titleCard}>Teléfono: </Text> 
+          { phone }
+        </Text>
       </View>
     </View>
   );
@@ -49,7 +57,7 @@ const styles = StyleSheet.create( {
     fontSize: 14,
     color: 'gray',
   },
-  location: {
+  phone: {
     fontSize: 14,
     color: 'gray',
   },
