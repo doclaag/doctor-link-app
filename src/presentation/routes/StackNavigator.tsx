@@ -16,12 +16,36 @@ const Stack = createStackNavigator<RootStackParams>();
 export const StackNavigator = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Welcome" component={WelcomeScreen} />
-      <Stack.Screen name="GetStarted" component={GetStartedScreen} />
-      <Stack.Screen name="SignIn" component={SignInScreen} />
-      <Stack.Screen name="SignUp" component={SignUpScreen} />
-      <Stack.Screen name="Search" component={SearchScreen} />
-      <Stack.Screen name="DoctorInformation" component={DoctorInformationScreen} />
+      <Stack.Screen
+        name="Welcome"
+        component={WelcomeScreen}
+        options={{ title: ''}} 
+      />
+      <Stack.Screen
+        name="SignIn"
+        component={SignInScreen}
+        options={{ title: ''}} 
+      />
+      <Stack.Screen
+        name="SignUp"
+        component={SignUpScreen}
+        options={{ title: ''}} 
+      />
+      <Stack.Screen
+        name="Search"
+        component={SearchScreen}
+        options={{ title: ''}} 
+      />
+      <Stack.Screen
+        name="DoctorInformation"
+        component={DoctorInformationScreen}
+        options={{ title: ''}} 
+      />
+      <Stack.Screen
+        name="GetStarted"
+        component={GetStartedScreen}
+        options={{ title: ''}} 
+      />
     </Stack.Navigator>
   )
 }
