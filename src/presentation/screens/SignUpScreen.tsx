@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
 import { FAB, Checkbox, TextInput } from 'react-native-paper';
 import { LogoShared } from '../components';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import { globalStyles } from '../theme';
 import { URL_PATIENTS } from '@env';
@@ -41,6 +42,7 @@ export const SignUpScreen = () => {
       is_active: true,
       no_dpi: noDPI,
     };
+    console.log(obj);
     try {
       const response = await axios.post(`${URL_PATIENTS}create/`, obj, { headers: { 'Content-Type': 'application/json' } });
       setModalMessage('Usuario registrado correctamente');
@@ -226,6 +228,7 @@ export const SignUpScreen = () => {
         >
           <View style={globalStyles.modalContainer1}>
             <View style={globalStyles.modalContent1}>
+            <Icon name="information-circle-outline" size={30} color="#aaaa" style={{ marginBottom: 10 }} />
               <Text style={globalStyles.modalMessage}>{modalMessage}</Text>
               <TouchableOpacity onPress={() => setModalVisible(false)} style={globalStyles.modalCloseButton1}>
                 <Text style={globalStyles.modalCloseButtonText}>Cerrar</Text>

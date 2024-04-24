@@ -174,6 +174,7 @@ export const globalStyles = StyleSheet.create({
   },
   textList:{
     fontSize: 18,
+    color: globalColors.gris,
   },
   specialtyItem: {
     fontSize: 16,
