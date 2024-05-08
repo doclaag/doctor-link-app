@@ -25,8 +25,8 @@ registerTranslation('pl', {
   typeInDate: 'Type in date',
   pickDateFromCalendar: 'Pick date from calendar',
   close: 'Close',
-  hour: '',
-  minute: ''
+  hour: '00',
+  minute: '00',
 });
 
 export const AppointmentTimeScreen = () => {
@@ -119,8 +119,8 @@ export const AppointmentTimeScreen = () => {
         visible={isTimePickerVisible}
         onDismiss={hideTimePicker}
         onConfirm={handleConfirm}
-        hours={12}
-        minutes={0}
+        hours={10}
+        minutes={15}
       />
 
       <TouchableOpacity
