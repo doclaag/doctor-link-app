@@ -6,7 +6,7 @@ export const globalColors = {
   primary: '#36CFC9',
   secondary: '#6D28D9',
   tertiary: '#374151',
-  white: '#fff',
+  white: 'white',
   gris: '#9b9b9b',
   red: 'red',
   black: '#000',
@@ -240,7 +240,6 @@ export const globalStyles = StyleSheet.create({
     alignItems: 'center',
   },
   infoContainer: {
-    backgroundColor: '#f5f5f5',
     padding: 10,
     margin: 10,
     shadowColor: '#000',
@@ -272,7 +271,7 @@ export const globalStyles = StyleSheet.create({
   info: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#333',
+    color: globalColors.secondary,
   },
   inputContainer: {
     flexDirection: 'row',

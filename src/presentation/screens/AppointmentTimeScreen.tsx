@@ -1,4 +1,3 @@
-// Importa useState
 import React, { useState, useEffect } from 'react';
 import { Pressable, Text, View, TouchableOpacity, Alert } from 'react-native';
 import { NavigationProp, useNavigation, DrawerActions } from '@react-navigation/native';
@@ -9,22 +8,24 @@ import { Calendar } from 'react-native-calendars';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { Button, IconButton } from 'react-native-paper';
 
-import { registerTranslation } from 'react-native-paper-dates'
-registerTranslation('pl', {
-  save: 'Save',
-  selectSingle: 'Select date',
-  selectMultiple: 'Select dates',
-  selectRange: 'Select period',
-  notAccordingToDateFormat: (inputFormat: any) => `Date format must be ${inputFormat}`,
-  mustBeHigherThan: (date: any) => `Must be later then ${date}`,
-  mustBeLowerThan: (date: any) => `Must be earlier then ${date}`,
-  mustBeBetween: (startDate: any, endDate: any) => `Must be between ${startDate} - ${endDate}`,
-  dateIsDisabled: 'Day is not allowed',
-  previous: 'Previous',
-  next: 'Next',
-  typeInDate: 'Type in date',
-  pickDateFromCalendar: 'Pick date from calendar',
-  close: 'Close',
+import { es, registerTranslation } from 'react-native-paper-dates'
+registerTranslation('es', es)
+
+registerTranslation('es', {
+  save: 'Guardar',
+  selectSingle: 'Seleccionar fecha',
+  selectMultiple: 'Seleccionar fechas',
+  selectRange: 'Seleccionar período',
+  notAccordingToDateFormat: (inputFormat: any) => `El formato de fecha debe ser ${inputFormat}`,
+  mustBeHigherThan: (date: any) => `Debe ser posterior a ${date}`,
+  mustBeLowerThan: (date: any) => `Debe ser anterior a ${date}`,
+  mustBeBetween: (startDate: any, endDate: any) => `Debe estar entre ${startDate} - ${endDate}`,
+  dateIsDisabled: 'Día no permitido',
+  previous: 'Anterior',
+  next: 'Siguiente',
+  typeInDate: 'Escribir fecha',
+  pickDateFromCalendar: 'Seleccionar fecha del calendario',
+  close: 'Cerrar',
   hour: '00',
   minute: '00',
 });
@@ -34,12 +35,19 @@ export const AppointmentTimeScreen = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [isTimePickerVisible, setTimePickerVisible] = useState(false);
-  const [isTooltipVisible, setTooltipVisible] = useState(false); // Estado para controlar la visibilidad del Tooltip
+  const [isTooltipVisible, setTooltipVisible] = useState(false); 
+  const [icon, setIcon] = useState("add");
 
   const toggleTooltip = () => {
-    setTooltipVisible(!isTooltipVisible); // Alternar el estado entre true y false
+    setTooltipVisible(!isTooltipVisible); 
   };
 
+  const toggleIcon = () => {
+    setIcon(icon === "add" ? "remove" : "add");
+  };
+  const resetOpacity = () => {
+    setTooltipVisible(false);
+  };
 
   useEffect(() => {
     navigation.setOptions({
@@ -74,8 +82,6 @@ export const AppointmentTimeScreen = () => {
       Alert.alert('Error', 'Por favor completa todos los campos.');
       return;
     }
-
-    // Implementa aquí la lógica para manejar el envío del formulario de cita
   };
 
   return (
@@ -107,6 +113,7 @@ export const AppointmentTimeScreen = () => {
           monthNamesShort={['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic']}
           dayNamesShort={['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb']}
           firstDay={1}
+          locate="es"
           theme={{
             textDayFontSize: 16,
             textMonthFontSize: 16,
@@ -129,24 +136,31 @@ export const AppointmentTimeScreen = () => {
       >
         <Text style={globalStyles.actionButtonText}>Seleccionar una hora</Text>
       </TouchableOpacity>
-
-      {/* Icono para desplegar el Tooltip */}
+      {isTooltipVisible && (
+        <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0, 0, 0, 0.5)', zIndex: 1 }} />
+      )}
+      <TouchableOpacity
+      style={{ backgroundColor:'white',position: 'absolute', bottom: 20, right: 20, zIndex: 2,borderRadius: 5000 }}
+      onPress={()=>{
+        toggleIcon(); 
+        toggleTooltip();
+      }} 
+      onBlur={() => resetOpacity()}
+      >         
       <IconButton
-        icon="add"
+        icon={icon}
         iconColor='blue'
         size={30}
-        style={{ position: 'absolute', bottom: 20, right: 20 }}
-        onPress={toggleTooltip} // Alternar el estado al presionar el icono
-      />
-
-      {/* Tooltip con dos botones, se renderiza condicionalmente */}
+        />
+      </TouchableOpacity>
       {isTooltipVisible && (
-        <View style={{ position: 'absolute', bottom: 80, right: 20 }}>
-          <View style={{ backgroundColor: 'white', padding: 10, borderRadius: 5 }}>
-            <Button onPress={handleSubmit} mode="outlined" style={{ marginBottom: 10}}>Agendar cita</Button>
-            <Button onPress={() => setTooltipVisible(false)} mode="outlined">Cancelar cita</Button>
+        <View style={{ position: 'absolute', bottom: 80, right: 20, zIndex: 2 }}>
+          <View style={{ backgroundColor: 'transparent', padding: 10, borderRadius: 5 }}>
+            <Button onPress={handleSubmit} mode="outlined" labelStyle={{ color: 'mintcream', fontSize: 16, fontWeight: 'bold' }} style={{ backgroundColor: '#1A9DC7', marginBottom: 10 }}>Agendar cita</Button>
+            <Button onPress={() => setTooltipVisible(false)} mode="outlined" labelStyle={{ color: 'mintcream', fontSize: 16, fontWeight: 'bold' }} style={{ backgroundColor: '#BB1515', marginBottom: 10 }}>Cancelar cita</Button>
           </View>
         </View>
+    
       )}
     </View>
 
