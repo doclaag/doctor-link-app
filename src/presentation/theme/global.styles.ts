@@ -236,12 +236,16 @@ export const globalStyles = StyleSheet.create({
   },
   centerContainerAppointmentTime: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    flexGrow: 1, 
+    marginTop: 35,
   },
   infoContainer: {
+    backgroundColor: globalColors.white,
     padding: 10,
     margin: 10,
+    marginTop: 35,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -250,6 +254,7 @@ export const globalStyles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+
   },
   titleAppointmentTime: {
     fontSize: 20,
@@ -285,15 +290,15 @@ export const globalStyles = StyleSheet.create({
     alignItems: 'center',
   },
   actionButtonText: {
-    color: Colors.white,
+    color: globalColors.white,
     fontSize: 18,
     fontWeight: 'bold',
   },
   timePickerButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: globalColors.primary,
     borderRadius: 5,
     padding: 10,
     alignItems: 'center',
-    marginVertical: 10,
+    marginTop: 20, // Agregar margen superior
   },
 });
