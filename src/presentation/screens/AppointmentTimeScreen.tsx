@@ -4,7 +4,7 @@ import { NavigationProp, useNavigation, DrawerActions } from '@react-navigation/
 import { TitleShared } from '../components';
 import { globalStyles } from '../theme';
 import { RootStackParams } from '../routes/StackNavigator';
-import { Calendar } from 'react-native-calendars';
+import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { Button, IconButton } from 'react-native-paper';
 import moment from 'moment'; // Importa moment para formatear fechas y horas
@@ -28,6 +28,15 @@ registerTranslation('en',{
   hour: '00',
   minute: '00',
 });
+
+LocaleConfig.locales['es'] = {
+  monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+  monthNamesShort: ['Ene.', 'Feb.', 'Mar', 'Abr', 'May', 'Jun', 'Jul.', 'Ago', 'Sept.', 'Oct.', 'Nov.', 'Dic.'],
+  dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+  dayNamesShort: ['Dom.', 'Lun.', 'Mar.', 'Mié.', 'Jue.', 'Vie.', 'Sáb.'],
+  today: 'Hoy'
+};
+LocaleConfig.defaultLocale = 'es';
 
 export const AppointmentTimeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
