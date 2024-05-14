@@ -6,7 +6,7 @@ export const globalColors = {
   primary: '#36CFC9',
   secondary: '#6D28D9',
   tertiary: '#374151',
-  white: '#fff',
+  white: 'white',
   gris: '#9b9b9b',
   red: 'red',
   black: '#000',
@@ -233,5 +233,72 @@ export const globalStyles = StyleSheet.create({
     shadowOpacity: 0.23,
     shadowRadius: 2.62,
     elevation: 4,
+  },
+  centerContainerAppointmentTime: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexGrow: 1, 
+    marginTop: 35,
+  },
+  infoContainer: {
+    backgroundColor: globalColors.white,
+    padding: 10,
+    margin: 10,
+    marginTop: 35,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+
+  },
+  titleAppointmentTime: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#333',
+    textAlign: 'center',
+  },
+  infoItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  labelNegrita: {
+    fontSize: 16,
+    color: '#555',
+    fontWeight: 'bold',
+  },
+  info: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: globalColors.secondary,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+  },
+  actionButton: {
+    backgroundColor: Colors.primary,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  actionButtonText: {
+    color: globalColors.white,
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  timePickerButton: {
+    backgroundColor: globalColors.primary,
+    borderRadius: 5,
+    padding: 10,
+    alignItems: 'center',
+    marginTop: 20, // Agregar margen superior
   },
 });

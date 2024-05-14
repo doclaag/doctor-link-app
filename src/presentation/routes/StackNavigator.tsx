@@ -1,5 +1,5 @@
 import { createStackNavigator } from '@react-navigation/stack';
-import { GetStartedScreen, SearchScreen, SignInScreen, SignUpScreen, WelcomeScreen, } from '../screens';
+import { GetStartedScreen, SearchScreen, SignInScreen, SignUpScreen, WelcomeScreen, AppointmentTimeScreen, } from '../screens';
 import DoctorInformationScreen from '../screens/DoctorInformationScreen';
 
 export type RootStackParams = {
@@ -9,6 +9,7 @@ export type RootStackParams = {
   SignUp: undefined;
   Search: undefined;
   DoctorInformation: undefined;
+  AppointmentTime: undefined;
 }
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -44,6 +45,11 @@ export const StackNavigator = () => {
       <Stack.Screen
         name="GetStarted"
         component={GetStartedScreen}
+        options={{ title: ''}} 
+      />
+      <Stack.Screen
+        name="AppointmentTime"
+        component={AppointmentTimeScreen}
         options={{ title: ''}} 
       />
     </Stack.Navigator>
