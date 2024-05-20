@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { StyleSheet, View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { globalColors, globalStyles } from '../theme';
 import { useNavigation } from '@react-navigation/native';
-import { StackActions } from '@react-navigation/native'; // Agrega esta importación para StackActions
+import { StackActions } from '@react-navigation/native';
 import { URL_DOCTORS, API_TOKEN } from '@env';
+import { RootStackParams } from '../routes/StackNavigator';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface Doctor {
-  id: string,
+  id: string;
   name: string;
   last_name: string;
   gender: number;
@@ -16,12 +18,14 @@ interface Doctor {
   no_collegiate: string;
 }
 
+type SearchScreenNavigationProp = StackNavigationProp<RootStackParams, 'Search'>;
+
 export const SearchScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [page, setPage] = useState(1);
   const [dataLength, setDataLength] = useState(1);
-  const navigation = useNavigation(); // Usa el hook useNavigation aquí
+  const navigation = useNavigation<SearchScreenNavigationProp>();
 
   const consultAPI = useCallback(async (page: number, query: string) => {
     const headers = new Headers({
@@ -39,10 +43,8 @@ export const SearchScreen = () => {
       const data: Doctor[] = await response.json();
       setDoctors(prevDoctors => (page === 1 ? data : [...prevDoctors, ...data]));
       setDataLength(data.length);
-      console.log(data);
     } catch (error) {
       console.error(error);
-      // TODO: Handle error in a user-friendly way
     }
   }, []);
 
@@ -86,7 +88,7 @@ export const SearchScreen = () => {
           <TouchableOpacity
             key={doctor.id}
             style={globalStyles.cardContainer}
-            onPress={() => navigation.dispatch(StackActions.push('DoctorInformationScreen', { doctorId: doctor.id }))}
+            onPress={() => navigation.navigate('DoctorInformation', { doctorId: doctor.id })}
           >
             <View style={globalStyles.cardContent}>
               <Image

@@ -8,7 +8,7 @@ export type RootStackParams = {
   SignIn: undefined;
   SignUp: undefined;
   Search: undefined;
-  DoctorInformation: undefined;
+  DoctorInformation: { doctorId: string };
   AppointmentTime: undefined;
 }
 
