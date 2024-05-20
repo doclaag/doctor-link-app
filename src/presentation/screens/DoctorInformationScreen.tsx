@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View, Text, Image, ActivityIndicator } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { globalStyles } from '../theme';
+import { globalStyles, globalColors } from '../theme';
 import { FAB } from 'react-native-paper';
 import { URL_DOCTORS_ID, API_TOKEN } from '@env';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParams } from '../routes/StackNavigator';
+import * as Animatable from 'react-native-animatable';
 
 type DoctorInformationScreenRouteProp = RouteProp<RootStackParams, 'DoctorInformation'>;
 
@@ -24,6 +25,7 @@ const DoctorInformationScreen = () => {
   const route = useRoute<DoctorInformationScreenRouteProp>();
   const { doctorId } = route.params;
   const [doctor, setDoctor] = useState<Doctor | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchDoctorData = async () => {
@@ -38,6 +40,8 @@ const DoctorInformationScreen = () => {
         setDoctor(data);
       } catch (error) {
         console.error(error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -45,11 +49,16 @@ const DoctorInformationScreen = () => {
   }, [doctorId]);
 
   if (!doctor) {
-    return <Text>Loading...</Text>;
+    return (
+      <View style={globalStyles.loadingContainer}>
+        <ActivityIndicator size="large" color={globalColors.primary} />
+        <Text style={globalStyles.loadingText}>Cargando...</Text>
+      </View>
+    );
   }
 
- return (
-<View style={globalStyles.containerDoctorInformation}>
+  return (
+    <Animatable.View animation="fadeIn" duration={600} style={globalStyles.containerDoctorInformation}>
       <View style={globalStyles.profileHeader}>
         <View style={globalStyles.profileAvatar}>
           <Image
@@ -73,9 +82,9 @@ const DoctorInformationScreen = () => {
           onPress={() => navigation.goBack()}
         />
       </View>
-    </View>
+    </Animatable.View>
   );
 };
 
-export default DoctorInformationScreen;
 
+export default DoctorInformationScreen;

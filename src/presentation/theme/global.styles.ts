@@ -359,5 +359,17 @@ export const globalStyles = StyleSheet.create({
     marginTop: 15,
     marginBottom: 15,
     width: '100%',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f2f2f2',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 18,
+    color: '#555',
+    fontWeight: 'bold',
   }
 });
