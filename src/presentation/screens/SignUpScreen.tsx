@@ -288,7 +288,7 @@ export const SignUpScreen = () => {
           <ScrollView style={styles.modalContent} contentContainerStyle={{ flexGrow: 1 }}>
             <Text style={styles.modalTitle}>Términos y Condiciones</Text>
 
-            <Text>
+            <Text style={styles.plagioText}>
             <Text style={styles.sectionTitle}>Bienvenido a Doctor-Link,</Text> una plataforma de citas médicas diseñada para conectar a pacientes con profesionales de la salud. Antes de utilizar nuestros servicios, te pedimos que leas atentamente estos <Text style={styles.importantText}>Términos y Condiciones</Text>, ya que constituyen un contrato legal entre tú y Doctor-Link. Al acceder o utilizar nuestra aplicación móvil, sitio web y servicios relacionados (en adelante, "la Plataforma"), aceptas cumplir con estos <Text style={styles.importantText}>Términos y Condiciones</Text>. Si no estás de acuerdo con alguna parte de estos términos, por favor, abstente de utilizar la Plataforma.
             
             {"\n\n"}
@@ -389,6 +389,7 @@ const styles = StyleSheet.create( {
     backgroundColor: 'skyblue',
   },
   modalTitle: {
+    color:'black',
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
@@ -398,6 +399,7 @@ const styles = StyleSheet.create( {
     fontWeight: 'bold',
   },
   importantText: {
+    color:'grey',
     fontWeight: 'bold',
     fontStyle: 'italic',
   },
@@ -436,4 +438,3 @@ const styles = StyleSheet.create( {
     fontStyle: 'italic',
   },
 } );
-
