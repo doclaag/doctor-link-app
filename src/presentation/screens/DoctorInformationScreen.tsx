@@ -98,7 +98,7 @@ const DoctorInformationScreen = () => {
         mode="contained"
         style={globalStyles.bottomContainer}
         labelStyle={globalStyles.fabButton}
-        onPress={() => navigation.navigate('AppointmentTime', { doctorName: `${doctor.name} ${doctor.last_name}` })}
+        onPress={() => navigation.navigate('AppointmentTime', { doctorId: `${doctor.id}` })}
       >
         Agendar Cita
       </Button>
