@@ -139,8 +139,10 @@ export const AppointmentTimeScreen = () => {
   };
   
     try {
-      console.log(URL_APPOINTMENT_CREATE, doctorId, appointmentData);
-      const response = await axios.post(`${URL_APPOINTMENT_CREATE}${doctorId}`, appointmentData, {
+      const url = `${URL_APPOINTMENT_CREATE}${doctorId}/`;
+      console.log(url, appointmentData);
+      console.log(API_TOKEN);
+      const response = await axios.post(url, appointmentData, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${API_TOKEN}`,
@@ -148,9 +150,10 @@ export const AppointmentTimeScreen = () => {
       });
   
       console.log('Cita agendada:', response.data);
-  
-      if (response.status === 200) {
-        Alert.alert('Éxito', 'Cita agendada correctamente.');
+      console.log(response.status);
+
+      if (response.status === 201) {
+        Alert.alert('Cita', 'Cita agendada correctamente.');
       } else {
         Alert.alert('Error', `Error al agendar cita: ${response.data.message}`);
       }
