@@ -31,6 +31,8 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+    padding: 20,
   },
   title: {
     textAlign: 'center',
@@ -105,10 +107,17 @@ export const globalStyles = StyleSheet.create({
   termsText: {
     color: globalColors.tertiary,
     marginLeft: sizes.textInputPadding,
+    fontWeight: 'bold',
+    fontSize: 15,
   },
   accountText: {
     marginTop: sizes.textInputMargin,
     color: globalColors.tertiary,
+    fontSize: 16,
+    textDecorationLine: 'underline',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    padding: 20
   },
   modalContainer: {
     flex: 1,
@@ -301,4 +310,11 @@ export const globalStyles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20, // Agregar margen superior
   },
+  welcomeText: {
+    textAlign: 'center',
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: globalColors.secondary,
+    marginVertical: 20,
+  }
 });
