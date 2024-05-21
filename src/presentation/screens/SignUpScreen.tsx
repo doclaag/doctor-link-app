@@ -4,7 +4,7 @@ import { FAB, IconButton, TextInput } from 'react-native-paper';
 import { LogoShared } from '../components';
 import type { RootStackParams } from '../routes/StackNavigator';
 import { globalColors, globalStyles } from '../theme';
-import { API_TOKEN, URL_PATIENTS } from '@env';
+import { URL_TOKEN, URL_PATIENTS } from '@env';
 import axios from 'axios';
 import { type NavigationProp, useNavigation, DrawerActions } from '@react-navigation/native';
 
@@ -122,7 +122,7 @@ export const SignUpScreen = () => {
   const handleRegister = async () => {
     if (!validateForm()) return;
     try {
-      const tokenResponse = await axios.post(API_TOKEN, {
+      const tokenResponse = await axios.post(URL_TOKEN, {
         email:'hola1@gmail.com',
         password:'123a',
       });

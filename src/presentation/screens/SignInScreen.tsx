@@ -4,7 +4,7 @@ import { FAB, TextInput } from 'react-native-paper';
 import { LogoShared } from '../components';
 import { globalStyles, globalColors } from '../theme';
 import axios from 'axios';
-import { API_TOKEN } from '@env';
+import { URL_TOKEN } from '@env';
 import type { RootStackParams } from '../routes/StackNavigator';
 import { type NavigationProp, useNavigation, DrawerActions } from '@react-navigation/native';
 
@@ -34,7 +34,7 @@ export const SignInScreen = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post(API_TOKEN, {
+      const response = await axios.post(URL_TOKEN, {
         email,
         password
       });
