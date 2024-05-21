@@ -43,7 +43,7 @@ export const SignInScreen = () => {
       const token = `Bearer ${access || refresh}`;
       console.log(token);
       Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión correctamente.');
-      navigation.navigate('AppoinmentsDoctor' as never)
+      navigation.navigate('Search' as never)
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
       Alert.alert('Error', 'No se pudo iniciar sesión. Por favor, revisa tus credenciales.');

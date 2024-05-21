@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Pressable, Text, View, TouchableOpacity, Alert } from 'react-native';
-import { NavigationProp, useNavigation, DrawerActions } from '@react-navigation/native';
+import { NavigationProp, useNavigation, useRoute, DrawerActions } from '@react-navigation/native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { Button, IconButton } from 'react-native-paper';
 import { TimePickerModal, registerTranslation } from 'react-native-paper-dates';
-import { RouteProp } from '@react-navigation/native';
 import { RootStackParams } from '../routes/StackNavigator';
+import { RouteProp } from '@react-navigation/native';
 import moment from 'moment';
 import 'moment/locale/es';
-
+import { URL_APPOINTMENT_CREATE, API_TOKEN } from '@env';
 import { TitleShared } from '../components';
 import { globalStyles } from '../theme';
-
+import axios from 'axios';
 
 registerTranslation( 'es', {
   save: 'Guardar',
@@ -40,12 +40,16 @@ LocaleConfig.locales[ 'es' ] = {
   today: 'Hoy'
 };
 
+type AppointmentTimeScreen = RouteProp<RootStackParams, 'AppointmentTime'>;
 LocaleConfig.defaultLocale = 'es';
 
 export const AppointmentTimeScreen = () => {
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
-  const [ selectedDate, setSelectedDate ] = useState( '' );
+  const [selectedDate, setSelectedDate] = useState('');
+  const [formattedDate, setFormattedDate] = useState('');
   const [ selectedTime, setSelectedTime ] = useState( '' );
+  const route = useRoute<AppointmentTimeScreen>();
+  const { doctorId } = route.params;
   const [ isTimePickerVisible, setTimePickerVisible ] = useState( false );
   const [ isTooltipVisible, setTooltipVisible ] = useState( false );
   const [ icon, setIcon ] = useState( "add" );
@@ -80,17 +84,15 @@ export const AppointmentTimeScreen = () => {
   };
 
   const handleConfirm = ( { hours, minutes }: { hours: number, minutes: number; } ) => {
-    const selectedTimeMoment = moment().set( { hours, minutes } ); // Crea un objeto moment con la hora seleccionada
-    const openingTime = moment().set( { hours: 8, minutes: 0 } ); // Horario de apertura a las 8:00 AM
-    const closingTime = moment().set( { hours: 18, minutes: 0 } ); // Horario de cierre a las 6:00 PM
+    const selectedTimeMoment = moment().set( { hours, minutes } ); 
+    const openingTime = moment().set( { hours: 8, minutes: 0 } );
+    const closingTime = moment().set( { hours: 18, minutes: 0 } );
 
-    // Verifica si la hora seleccionada está dentro del rango permitido
     if ( selectedTimeMoment.isBefore( openingTime ) || selectedTimeMoment.isAfter( closingTime ) ) {
       Alert.alert( 'Error', 'El horario seleccionado está fuera del horario de atención (8:00 AM - 6:00 PM).' );
       return;
     }
 
-    // Formato de 12 horas
     const formattedHours = hours < 10 ? `0${ hours }` : hours > 12 ? `0${ hours - 12 }` : hours;
     const period = hours >= 12 ? 'PM' : 'AM'; // AM o PM
     const formattedMinutes = minutes < 10 ? `0${ minutes }` : minutes;
@@ -100,31 +102,64 @@ export const AppointmentTimeScreen = () => {
     hideTimePicker();
   };
 
-
   const handleDateSelect = ( day: any ) => {
-    const selectedDate = moment( day.dateString || day.date )
-      .locale( 'es' )
-      .format( 'dddd DD [de] MMMM [del] YYYY' );
+    const selectedDateMoment = moment(day.dateString || day.date).locale('es');
+    const displayDate = selectedDateMoment.format('dddd DD [de] MMMM [del] YYYY');
+    const formattedDate = selectedDateMoment.format('YYYY-MM-DD');
 
-    setSelectedDate( selectedDate );
+    setSelectedDate(displayDate);
+    setFormattedDate(formattedDate);
   };
 
-  const handleSubmit = () => {
-    const currentTime = moment().format( 'HH:mm' ); // Hora actual en formato HH:mm
-    const selectedTimeMoment = moment( selectedTime, 'hh:mm A' );
-    const openingTime = moment( '08:00 AM', 'hh:mm A' );
-    const closingTime = moment( '06:00 PM', 'hh:mm A' );
-
-    if ( !selectedDate || !selectedTime ) {
-      Alert.alert( 'Error', 'Por favor completa todos los campos.' );
+  const submitAppointment = useCallback(async () => {
+    const currentTime = moment().format('HH:mm'); // Hora actual en formato HH:mm
+    const selectedTimeMoment = moment(selectedTime, 'hh:mm A');
+    const openingTime = moment('08:00 AM', 'hh:mm A');
+    const closingTime = moment('06:00 PM', 'hh:mm A');
+  
+    // Verificar si se han completado todos los campos
+    if (!selectedDate || !selectedTime) {
+      Alert.alert('Error', 'Por favor completa todos los campos.');
       return;
     }
-
-    if ( selectedTimeMoment.isBefore( openingTime ) || selectedTimeMoment.isAfter( closingTime ) ) {
-      Alert.alert( 'Error', 'El horario seleccionado está fuera del horario de atención (8:00 AM - 6:00 PM).' );
+  
+    // Verificar si el horario seleccionado está dentro del horario de atención
+    if (selectedTimeMoment.isBefore(openingTime) || selectedTimeMoment.isAfter(closingTime)) {
+      Alert.alert('Error', 'El horario seleccionado está fuera del horario de atención (8:00 AM - 6:00 PM).');
       return;
     }
+  
+  const formattedTime = moment(selectedTime, 'hh:mm A').format('HH:mm:ss');
+
+  // Preparar los datos para la solicitud de cita
+  const appointmentData = {
+    date: formattedDate,
+    observation: 'Prueba',
+    time: formattedTime,
   };
+  
+    try {
+      console.log(URL_APPOINTMENT_CREATE, doctorId, appointmentData);
+      const response = await axios.post(`${URL_APPOINTMENT_CREATE}${doctorId}`, appointmentData, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${API_TOKEN}`,
+        },
+      });
+  
+      console.log('Cita agendada:', response.data);
+  
+      if (response.status === 200) {
+        Alert.alert('Éxito', 'Cita agendada correctamente.');
+      } else {
+        Alert.alert('Error', `Error al agendar cita: ${response.data.message}`);
+      }
+    } catch (error) {
+      console.error('Error al agendar cita:', error);
+      Alert.alert('Error', 'Ocurrió un error al agendar la cita.');
+    }
+  }, [selectedDate, selectedTime]);
+  
 
   return (
     <View style={ globalStyles.centerContainerAppointmentTime }>
@@ -214,19 +249,19 @@ export const AppointmentTimeScreen = () => {
         <View style={ { position: 'absolute', bottom: 80, right: 20, zIndex: 2 } }>
           <View style={ { backgroundColor: 'transparent', padding: 10, borderRadius: 5 } }>
             <Button
-              onPress={ handleSubmit }
-              mode="outlined"
-              labelStyle={ { color: 'mintcream', fontSize: 16, fontWeight: 'bold' } }
-              style={ { backgroundColor: '#1A9DC7', marginBottom: 10 } }
+            onPress={submitAppointment}
+            mode="outlined"
+            labelStyle={{ color: 'mintcream', fontSize: 16, fontWeight: 'bold' }}
+            style={{ backgroundColor: '#1A9DC7', marginBottom: 10 }}
             >
               Agendar cita
             </Button>
 
             <Button
-              onPress={ () => setTooltipVisible( false ) }
+              onPress={() => setTooltipVisible(false)}
               mode="outlined"
-              labelStyle={ { color: 'mintcream', fontSize: 16, fontWeight: 'bold' } }
-              style={ { backgroundColor: '#BB1515', marginBottom: 10 } }
+              labelStyle={{ color: 'mintcream', fontSize: 16, fontWeight: 'bold' }}
+              style={{ backgroundColor: '#BB1515', marginBottom: 10 }}
             >
               Cancelar cita
             </Button>

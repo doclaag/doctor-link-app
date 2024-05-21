@@ -99,7 +99,7 @@ return (
         mode="contained"
         style={globalStyles.bottomContainer}
         labelStyle={globalStyles.fabButton}
-        onPress={() => navigation.navigate('AppointmentTime')}
+        onPress={() => navigation.navigate('AppointmentTime', { doctorId: doctor.id })}
       >
         Agendar Cita
       </Button>

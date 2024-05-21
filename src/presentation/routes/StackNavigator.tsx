@@ -10,8 +10,7 @@ export type RootStackParams = {
   SignUp: undefined;
   Search: undefined;
   DoctorInformation: { doctorId: string };
-  AppointmentTime: undefined;
-  AppoinmentsDoctor:undefined;
+  AppointmentTime: { doctorId:string };
 }
 
 const Stack = createStackNavigator<RootStackParams>();
