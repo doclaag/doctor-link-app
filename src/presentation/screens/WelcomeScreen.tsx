@@ -12,16 +12,6 @@ export const WelcomeScreen = () => {
 
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Pressable onPress={ () => navigation.dispatch(DrawerActions.toggleDrawer) }>
-          <Text>Menu</Text>
-        </Pressable>
-      ),
-    });
-  }, []);
-
   return (
     <>
       <View style={ globalStyles.centerContainer }>

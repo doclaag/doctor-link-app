@@ -33,7 +33,7 @@ export const SideMenuNavigator = () =>  {
       <Drawer.Screen name="StackNavigator" component={StackNavigator} />
       <Drawer.Screen name="Inicio" component={WelcomeScreen} />
       <Drawer.Screen name="Citas" component={AppoinmentsDoctorScreen} />
-      <Drawer.Screen name="DoctorInformation" component={DoctorInformationScreen} />
+      <Drawer.Screen name="Información Doctor" component={DoctorInformationScreen} />
       <Drawer.Screen name="Buscar" component={SearchScreen} />
       <Drawer.Screen name="Editar perfil" component={EditPersonalInformation} />
       <Drawer.Screen name="Programar Cita" component={AppointmentTimeScreen} />

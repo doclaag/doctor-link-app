@@ -31,15 +31,6 @@ export const SignUpScreen = () => {
 
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Pressable onPress={ () => navigation.dispatch(DrawerActions.toggleDrawer) }>
-          <Text>Menu</Text>
-        </Pressable>
-      ),
-    });
-  }, []);
   const toggleTerms = () => {
     setProvedTerms(!provedTerms);
     setIcon(icon === "remove" ? "checkbox" : "remove");

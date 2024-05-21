@@ -10,7 +10,8 @@ export type RootStackParams = {
   SignUp: undefined;
   Search: undefined;
   DoctorInformation: { doctorId: string };
-  AppointmentTime: undefined;
+  DoctorInformationScreen: {doctorId: string };
+  AppointmentTime: { doctorName: string };
   AppoinmentsDoctor:undefined;
 }
 
@@ -40,11 +41,6 @@ export const StackNavigator = () => {
         options={{ title: ''}} 
       />
       <Stack.Screen
-        name="DoctorInformation"
-        component={DoctorInformationScreen}
-        options={{ title: ''}} 
-      />
-      <Stack.Screen
         name="GetStarted"
         component={GetStartedScreen}
         options={{ title: ''}} 
@@ -59,6 +55,11 @@ export const StackNavigator = () => {
       component={AppoinmentsDoctorScreen}
       options={{ title: ''}} 
     />
+    <Stack.Screen
+        name="DoctorInformationScreen"
+        component={DoctorInformationScreen}
+        options={{ title: ''}} 
+      />
     </Stack.Navigator>
   )
 }

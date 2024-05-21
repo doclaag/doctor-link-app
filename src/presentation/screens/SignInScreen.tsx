@@ -16,15 +16,7 @@ export const SignInScreen = () => {
   const [ emailError, setEmailError ] = useState( '' );
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Pressable onPress={ () => navigation.dispatch(DrawerActions.toggleDrawer) }>
-          <Text>Menu</Text>
-        </Pressable>
-      ),
-    });
-  }, []);
+ 
   const handleLogin = async() => {
     if (!validateEmail(email) ) {
       setEmailError( 'Correo electrónico inválido' );
@@ -43,10 +35,11 @@ export const SignInScreen = () => {
       const token = `Bearer ${access || refresh}`;
       console.log(token);
       Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión correctamente.');
-      navigation.navigate('AppoinmentsDoctor' as never)
+      navigation.navigate('Search' as never)
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
       Alert.alert('Error', 'No se pudo iniciar sesión. Por favor, revisa tus credenciales.');
+      console.log(URLTOKEN);
     } finally {
       setLoading(false);
     }
