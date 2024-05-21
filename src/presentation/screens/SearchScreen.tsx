@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, Pressable } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { globalColors, globalStyles } from '../theme';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, DrawerActions } from '@react-navigation/native';
 import { StackActions } from '@react-navigation/native';
 import { URL_DOCTORS, API_TOKEN } from '@env';
 import { RootStackParams } from '../routes/StackNavigator';
@@ -25,7 +25,19 @@ export const SearchScreen = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [page, setPage] = useState(1);
   const [dataLength, setDataLength] = useState(1);
-  const navigation = useNavigation<SearchScreenNavigationProp>();
+  
+  const navigation1 = useNavigation<SearchScreenNavigationProp>();
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <Pressable onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+          <Text>Menu</Text>
+        </Pressable>
+      ),
+    });
+  }, [navigation]);
 
   const consultAPI = useCallback(async (page: number, query: string) => {
     const headers = new Headers({
@@ -88,7 +100,7 @@ export const SearchScreen = () => {
           <TouchableOpacity
             key={doctor.id}
             style={globalStyles.cardContainer}
-            onPress={() => navigation.navigate('DoctorInformation', { doctorId: doctor.id })}
+            onPress={() => navigation1.navigate('DoctorInformationScreen', { doctorId: doctor.id })}
           >
             <View style={globalStyles.cardContent}>
               <Image
