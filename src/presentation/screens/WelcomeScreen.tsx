@@ -34,7 +34,7 @@ export const WelcomeScreen = () => {
         <FAB
         style={ { backgroundColor: '#36CFC9', margin: 10 } }
         icon={ 'log-in-outline' }
-        label={ 'Acceder' }
+        label={ 'Iniciar' }
         onPress={ () => navigation.navigate( 'GetStarted' as never) }
       />
       </View>
