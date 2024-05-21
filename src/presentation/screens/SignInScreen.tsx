@@ -47,6 +47,7 @@ export const SignInScreen = () => {
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
       Alert.alert('Error', 'No se pudo iniciar sesión. Por favor, revisa tus credenciales.');
+      console.log(URLTOKEN);
     } finally {
       setLoading(false);
     }
