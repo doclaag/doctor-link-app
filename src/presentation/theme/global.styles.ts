@@ -186,13 +186,19 @@ export const globalStyles = StyleSheet.create({
   },
   bottomContainer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 25,
     alignSelf: 'flex-start',
-    marginLeft: 20,
+    marginLeft: 25,
+    width: '40%',
+    height: 60,
+    backgroundColor: globalColors.secondary,
   },
   fabButton: {
-    backgroundColor: globalColors.red, // Color de fondo rojo
-    color: globalColors.gris, // Color del texto gris
+    fontSize: 15, 
+    color: globalColors.white,
+    fontWeight: 'bold',
+    flex: 1,
+    alignItems: 'center',
   },
     personContainer: {
     flexDirection: 'row',

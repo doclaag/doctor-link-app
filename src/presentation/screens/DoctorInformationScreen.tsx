@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, ActivityIndicator } from 'react-native';
+import { View, Text, Image, ActivityIndicator, StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { globalStyles, globalColors } from '../theme';
-import { FAB } from 'react-native-paper';
+import { FAB, Button } from 'react-native-paper';
 import { URL_DOCTORS_ID, API_TOKEN } from '@env';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParams } from '../routes/StackNavigator';
 import * as Animatable from 'react-native-animatable';
+import { StackNavigationProp } from '@react-navigation/stack';
+
 
 type DoctorInformationScreenRouteProp = RouteProp<RootStackParams, 'DoctorInformation'>;
 
@@ -21,7 +23,7 @@ interface Doctor {
 }
 
 const DoctorInformationScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<StackNavigationProp<RootStackParams>>();
   const route = useRoute<DoctorInformationScreenRouteProp>();
   const { doctorId } = route.params;
   const [doctor, setDoctor] = useState<Doctor | null>(null);
@@ -57,7 +59,19 @@ const DoctorInformationScreen = () => {
     );
   }
 
-  return (
+  const styles = StyleSheet.create({
+  button: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: globalColors.secondary, // Color de fondo rojo
+  },
+  buttonText: {
+    color: globalColors.white, // Color del texto gris
+  },
+});
+
+return (
     <Animatable.View animation="fadeIn" duration={600} style={globalStyles.containerDoctorInformation}>
       <View style={globalStyles.profileHeader}>
         <View style={globalStyles.profileAvatar}>
@@ -74,14 +88,14 @@ const DoctorInformationScreen = () => {
           <Text style={globalStyles.speciality}>{doctor.speciality}</Text>
         </View>
       </View>
-      <View style={globalStyles.bottomContainer}>
-        <FAB
-          style={globalStyles.fabButton}
-          icon={'log-in-outline'}
-          label={'Regresar'}
-          onPress={() => navigation.goBack()}
-        />
-      </View>
+      <Button
+        mode="contained"
+        style={globalStyles.bottomContainer}
+        labelStyle={globalStyles.fabButton}
+        onPress={() => navigation.navigate('AppointmentTime')}
+      >
+        Agendar Cita
+      </Button>
     </Animatable.View>
   );
 };

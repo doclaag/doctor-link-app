@@ -4,13 +4,14 @@ import { NavigationProp, useNavigation, DrawerActions } from '@react-navigation/
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { Button, IconButton } from 'react-native-paper';
 import { TimePickerModal, registerTranslation } from 'react-native-paper-dates';
-
+import { RouteProp } from '@react-navigation/native';
+import { RootStackParams } from '../routes/StackNavigator';
 import moment from 'moment';
 import 'moment/locale/es';
 
 import { TitleShared } from '../components';
 import { globalStyles } from '../theme';
-import { RootStackParams } from '../routes/StackNavigator';
+
 
 registerTranslation( 'es', {
   save: 'Guardar',
