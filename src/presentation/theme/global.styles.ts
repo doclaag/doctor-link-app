@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import { transparent } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export const globalColors = {
@@ -108,16 +108,12 @@ export const globalStyles = StyleSheet.create({
     color: globalColors.tertiary,
     marginLeft: sizes.textInputPadding,
     fontWeight: 'bold',
-    fontSize: 15,
   },
   accountText: {
     marginTop: sizes.textInputMargin,
     color: globalColors.tertiary,
     fontSize: 16,
     textDecorationLine: 'underline',
-    fontWeight: 'bold',
-    textAlign: 'center',
-    padding: 20
   },
   modalContainer: {
     flex: 1,
@@ -162,7 +158,7 @@ export const globalStyles = StyleSheet.create({
     resizeMode: 'cover',
   },
   doctorName: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
     color: Colors.black,
   },
@@ -173,13 +169,15 @@ export const globalStyles = StyleSheet.create({
     margin: 10,
   },
   specialtiesTitle: {
+    marginTop: 10,
     fontSize: 20,
     color: Colors.black,
     fontWeight: 'bold',
   },
   specialtiesList: {
     flex: 1,
-    marginTop: 10,
+    width: '100%',
+    height: 'auto',
   },
   textList:{
     fontSize: 18,
@@ -190,13 +188,19 @@ export const globalStyles = StyleSheet.create({
   },
   bottomContainer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 25,
     alignSelf: 'flex-start',
-    marginLeft: 20,
+    marginLeft: 25,
+    width: '40%',
+    height: 60,
+    backgroundColor: globalColors.secondary,
   },
   fabButton: {
-    backgroundColor: globalColors.red, // Color de fondo rojo
-    color: globalColors.gris, // Color del texto gris
+    fontSize: 15, 
+    color: globalColors.white,
+    fontWeight: 'bold',
+    flex: 1,
+    alignItems: 'center',
   },
     personContainer: {
     flexDirection: 'row',
@@ -227,13 +231,13 @@ export const globalStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 10,
+    marginTop: 5, // Reducido el margen superior
+    marginBottom: 5, // Reducido el margen inferior
     borderWidth: 1, 
     borderColor: 'lightgray', 
     borderRadius: 10, 
-    padding: 10, 
-    backgroundColor: globalColors.skyblue,
+    padding: 3, 
+    backgroundColor: globalColors.primary,
     shadowColor: "#000",
     shadowOffset: {
         width: 0,
@@ -316,5 +320,65 @@ export const globalStyles = StyleSheet.create({
     fontWeight: 'bold',
     color: globalColors.secondary,
     marginVertical: 20,
+  },
+  containerSearchScreen: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 10,
+  },
+  scrollView: {
+    width: '100%',
+  },
+  cardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: globalColors.white,
+    borderRadius: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+    width: '100%',
+  },
+  imageSearchDoctor: {
+    width: 80,
+    height: 80,
+    marginBottom: sizes.textInputMargin,
+    borderRadius: sizes.borderRadius / 5,
+    alignSelf: 'center',
+  },
+  cardTextContainer: {
+    flex: 1,
+  },
+  speciality: {
+    margin: 5,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: globalColors.gris,
+  },
+  phone: {
+    fontSize: 16,
+    color: globalColors.primary,
+  },
+  searchbar: {
+    marginTop: 15,
+    marginBottom: 15,
+    width: '100%',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f2f2f2',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 18,
+    color: '#555',
+    fontWeight: 'bold',
   }
 });
