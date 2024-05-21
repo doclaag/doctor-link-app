@@ -15,6 +15,7 @@ type DoctorInformationScreenRouteProp = RouteProp<RootStackParams, 'DoctorInform
 interface Doctor {
   id: string;
   name: string;
+  email: string;
   last_name: string;
   gender: number;
   speciality: string;
@@ -40,6 +41,7 @@ const DoctorInformationScreen = () => {
         const response = await fetch(`${URL_DOCTORS_ID}${doctorId}`, { method: 'GET', headers });
         const data: Doctor = await response.json();
         setDoctor(data);
+        console.log(data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -80,9 +82,14 @@ return (
             style={globalStyles.avatarImage}
           />
         </View>
-        <Text style={globalStyles.doctorName}>{`${doctor.name} ${doctor.last_name}`}</Text>
+        <Text style={globalStyles.doctorName}>Dr. {`${doctor.name} ${doctor.last_name}`}</Text>
       </View>
+
       <View style={globalStyles.profileSpecialties}>
+      <Text style={globalStyles.specialtiesTitle}>Datos generales:</Text>
+        <Text style={globalStyles.speciality}>Email: {doctor.email}</Text>
+        <Text style={globalStyles.speciality}>Teléfono: {doctor.phone}</Text>
+        <Text style={globalStyles.speciality}>Número de colegiado: {doctor.no_collegiate}</Text>
         <Text style={globalStyles.specialtiesTitle}>Especialidades:</Text>
         <View style={globalStyles.specialtiesList}>
           <Text style={globalStyles.speciality}>{doctor.speciality}</Text>

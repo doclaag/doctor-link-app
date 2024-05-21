@@ -169,13 +169,15 @@ export const globalStyles = StyleSheet.create({
     margin: 10,
   },
   specialtiesTitle: {
+    marginTop: 10,
     fontSize: 20,
     color: Colors.black,
     fontWeight: 'bold',
   },
   specialtiesList: {
     flex: 1,
-    marginTop: 10,
+    width: '100%',
+    height: 'auto',
   },
   textList:{
     fontSize: 18,
@@ -353,6 +355,7 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
   },
   speciality: {
+    margin: 5,
     fontSize: 20,
     fontWeight: 'bold',
     color: globalColors.gris,
