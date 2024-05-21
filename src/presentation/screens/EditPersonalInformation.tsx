@@ -7,10 +7,10 @@ import { globalColors } from '../theme/global.styles';
 type Gender = 'Masculino' | 'Femenino';
 
 export const EditPersonalInformation = () => {
-  const [nombre, setNombre] = useState(''); // Cambiado setName a setNombre para mantener la consistencia en el idioma
-  const [apellido, setApellido] = useState(''); // Cambiado setSurname a setApellido para mantener la consistencia en el idioma
+  const [nombre, setNombre] = useState(''); 
+  const [apellido, setApellido] = useState(''); 
   const [gender, setGender] = useState<Gender | null>(null);
-  const [telefono, setTelefono] = useState(''); // Cambiado setPhone a setTelefono para mantener la consistencia en el idioma
+  const [telefono, setTelefono] = useState(''); 
   const [fechaNacimiento, setFechaNacimiento] = useState('');
   const [visibleModal, setVisibleModal] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});

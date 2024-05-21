@@ -8,7 +8,7 @@ import { RouteProp } from '@react-navigation/native';
 import { RootStackParams } from '../routes/StackNavigator';
 import * as Animatable from 'react-native-animatable';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type DoctorInformationScreenRouteProp = RouteProp<RootStackParams, 'DoctorInformation'>;
 
@@ -32,16 +32,19 @@ const DoctorInformationScreen = () => {
 
   useEffect(() => {
     const fetchDoctorData = async () => {
-      const headers = new Headers({
-        'Authorization': `Bearer ${API_TOKEN}`,
-        'Content-Type': 'application/json'
-      });
-
       try {
+        const storedToken = await AsyncStorage.getItem('userToken');
+        if (!storedToken) {
+          throw new Error('Token not found');
+        }
+        const headers = new Headers({
+          'Authorization': storedToken,
+          'Content-Type': 'application/json'
+        });
+
         const response = await fetch(`${URL_DOCTORS_ID}${doctorId}`, { method: 'GET', headers });
         const data: Doctor = await response.json();
         setDoctor(data);
-        console.log(data);
       } catch (error) {
         console.error(error);
       } finally {
@@ -52,11 +55,19 @@ const DoctorInformationScreen = () => {
     fetchDoctorData();
   }, [doctorId]);
 
-  if (!doctor) {
+  if (loading) {
     return (
       <View style={globalStyles.loadingContainer}>
         <ActivityIndicator size="large" color={globalColors.primary} />
         <Text style={globalStyles.loadingText}>Cargando...</Text>
+      </View>
+    );
+  }
+
+  if (!doctor) {
+    return (
+      <View style={globalStyles.loadingContainer}>
+        <Text style={globalStyles.loadingText}>No se encontraron datos del doctor.</Text>
       </View>
     );
   }

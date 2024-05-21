@@ -3,10 +3,10 @@ import { View, Text, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { globalColors, globalStyles } from '../theme';
 import { useNavigation } from '@react-navigation/native';
-import { StackActions } from '@react-navigation/native';
-import { URL_DOCTORS, API_TOKEN } from '@env';
+import { URL_DOCTORS } from '@env';
 import { RootStackParams } from '../routes/StackNavigator';
 import { StackNavigationProp } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Doctor {
   id: string;
@@ -28,24 +28,29 @@ export const SearchScreen = () => {
   const navigation = useNavigation<SearchScreenNavigationProp>();
 
   const consultAPI = useCallback(async (page: number, query: string) => {
-    const headers = new Headers({
-      'Authorization': `Bearer ${API_TOKEN}`,
-      'Content-Type': 'application/json'
-    });
+    try {
+      const storedToken = await AsyncStorage.getItem('userToken');
+      if (!storedToken) {
+        throw new Error('Token not found');
+      }
+
+      const headers = new Headers({
+        'Authorization': storedToken,
+        'Content-Type': 'application/json'
+      });
 
     const requestOptions = {
       method: 'GET',
       headers: headers
     };
 
-    try {
-      const response = await fetch(`${URL_DOCTORS}?page=${page}&limit=8&query=${query}`, requestOptions);
-      const data: Doctor[] = await response.json();
-      setDoctors(prevDoctors => (page === 1 ? data : [...prevDoctors, ...data]));
-      setDataLength(data.length);
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await fetch(`${URL_DOCTORS}?page=${page}&limit=8&query=${query}`, requestOptions);
+    const data: Doctor[] = await response.json();
+    setDoctors(prevDoctors => (page === 1 ? data : [...prevDoctors, ...data]));
+    setDataLength(data.length);
+  } catch (error) {
+    console.error('Error fetching doctors:', error);
+  }
   }, []);
 
   useEffect(() => {

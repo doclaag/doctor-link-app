@@ -7,6 +7,7 @@ import { globalColors, globalStyles } from '../theme';
 import { URL_TOKEN, URL_PATIENTS } from '@env';
 import axios from 'axios';
 import { type NavigationProp, useNavigation, DrawerActions } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type Gender = 0 | 1;
 
