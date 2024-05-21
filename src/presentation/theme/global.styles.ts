@@ -256,7 +256,7 @@ export const globalStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     flexGrow: 1, 
-    marginTop: 35,
+    marginTop: 5,
   },
   infoContainer: {
     backgroundColor: globalColors.white,
@@ -317,6 +317,7 @@ export const globalStyles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     marginTop: 20, // Agregar margen superior
+    marginBottom: 40,
   },
   containerSearchScreen: {
     flex: 1,
@@ -384,5 +385,25 @@ export const globalStyles = StyleSheet.create({
     fontSize: 18,
     color: '#555',
     fontWeight: 'bold',
+},
+textArea: {
+  marginTop: 10,
+  padding: 10,
+  borderRadius: 5,
+  borderWidth: 1,
+  borderColor: '#ccc',
+  backgroundColor: '#fff',
+  textAlignVertical: 'top', // Para Android
+  fontSize: 16,
+  width: '100%',
+  height: 150,
+},
+contenidoCita: {
+  flex:1,
+  alignContent: 'center',
+  width: '90%', 
+  height: 'auto', 
+  borderRadius: 10, 
+  alignSelf: 'center',
 },
 });
