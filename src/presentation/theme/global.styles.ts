@@ -108,12 +108,16 @@ export const globalStyles = StyleSheet.create({
     color: globalColors.tertiary,
     marginLeft: sizes.textInputPadding,
     fontWeight: 'bold',
+    fontSize: 15,
   },
   accountText: {
     marginTop: sizes.textInputMargin,
     color: globalColors.tertiary,
     fontSize: 16,
     textDecorationLine: 'underline',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    padding: 20
   },
   modalContainer: {
     flex: 1,
@@ -380,5 +384,4 @@ export const globalStyles = StyleSheet.create({
     fontSize: 18,
     color: '#555',
     fontWeight: 'bold',
-  }
 });

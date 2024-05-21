@@ -44,7 +44,7 @@ export const GetStartedScreen = () => {
       />
       
       <FAB
-        style={ { backgroundColor: '#d2dbd2dd', margin: 10, marginBottom: 100,  } }
+        style={ { backgroundColor: '#d2dbd2', margin: 10, marginBottom: 100,  } }
         icon={ 'pencil-outline' }
         label={ 'Registrar' }
         color={ '#000' }

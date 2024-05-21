@@ -1,6 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import { GetStartedScreen, SearchScreen, SignInScreen, SignUpScreen, WelcomeScreen, AppointmentTimeScreen, } from '../screens';
 import DoctorInformationScreen from '../screens/DoctorInformationScreen';
+import { AppoinmentsDoctorScreen } from '../screens/AppointmentsDoctorScreen';
 
 export type RootStackParams = {
   Welcome: undefined;
@@ -10,6 +11,7 @@ export type RootStackParams = {
   Search: undefined;
   DoctorInformation: { doctorId: string };
   AppointmentTime: undefined;
+  AppoinmentsDoctor:undefined;
 }
 
 const Stack = createStackNavigator<RootStackParams>();
@@ -52,6 +54,11 @@ export const StackNavigator = () => {
         component={AppointmentTimeScreen}
         options={{ title: ''}} 
       />
+      <Stack.Screen
+      name="AppoinmentsDoctor"
+      component={AppoinmentsDoctorScreen}
+      options={{ title: ''}} 
+    />
     </Stack.Navigator>
   )
 }
