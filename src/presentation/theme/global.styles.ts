@@ -384,4 +384,5 @@ export const globalStyles = StyleSheet.create({
     fontSize: 18,
     color: '#555',
     fontWeight: 'bold',
+},
 });
