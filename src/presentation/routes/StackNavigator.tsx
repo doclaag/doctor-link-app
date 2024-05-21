@@ -11,7 +11,7 @@ export type RootStackParams = {
   Search: undefined;
   DoctorInformation: { doctorId: string };
   DoctorInformationScreen: {doctorId: string };
-  AppointmentTime: { doctorName: string };
+  AppointmentTime: { doctorId: string };
   AppoinmentsDoctor:undefined;
 }
 
