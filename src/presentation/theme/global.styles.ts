@@ -193,14 +193,15 @@ export const globalStyles = StyleSheet.create({
   bottomContainer: {
     position: 'absolute',
     bottom: 25,
-    alignSelf: 'flex-start',
     marginLeft: 25,
     width: '40%',
     height: 60,
     backgroundColor: globalColors.secondary,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   fabButton: {
-    fontSize: 15, 
+    fontSize: 19, 
     color: globalColors.white,
     fontWeight: 'bold',
     flex: 1,
