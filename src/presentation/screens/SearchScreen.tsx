@@ -51,10 +51,12 @@ export const SearchScreen = () => {
     };
 
     try {
+      console.log(API_TOKEN);
       const response = await fetch(`${URL_DOCTORS}?page=${page}&limit=8&query=${query}`, requestOptions);
       const data: Doctor[] = await response.json();
       setDoctors(prevDoctors => (page === 1 ? data : [...prevDoctors, ...data]));
       setDataLength(data.length);
+      console.log(data);
     } catch (error) {
       console.error(error);
     }

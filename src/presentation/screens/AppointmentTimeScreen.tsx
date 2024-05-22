@@ -142,6 +142,7 @@ export const AppointmentTimeScreen = () => {
     try {
       const URL = `${URL_APPOINTMENT_CREATE}${doctorId}/`;
       console.log(URL, appointmentData);
+      console.log(API_TOKEN);
       const response = await axios.post(URL, appointmentData, {
         headers: {
           'Content-Type': 'application/json',
