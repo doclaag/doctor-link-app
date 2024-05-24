@@ -30,12 +30,12 @@ export const SignInScreen = () => {
         email,
         password
       });
-
+      console.log('Entra');
       const { access, refresh } = response.data;
       const token = `Bearer ${access || refresh}`;
       console.log(token);
       Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión correctamente.');
-      navigation.navigate('Search' as never)
+      navigation.navigate('AppointmentSearch' as never)
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
       Alert.alert('Error', 'No se pudo iniciar sesión. Por favor, revisa tus credenciales.');

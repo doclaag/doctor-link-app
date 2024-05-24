@@ -201,7 +201,7 @@ export const globalStyles = StyleSheet.create({
     alignItems: 'center',
   },
   fabButton: {
-    fontSize: 19, 
+    fontSize: 16, 
     color: globalColors.white,
     fontWeight: 'bold',
     flex: 1,
@@ -255,9 +255,8 @@ export const globalStyles = StyleSheet.create({
   centerContainerAppointmentTime: {
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexGrow: 1, 
-    marginTop: 5,
+    alignItems: 'flex-start',
+    marginTop: 10,
   },
   infoContainer: {
     backgroundColor: globalColors.white,
@@ -357,6 +356,13 @@ export const globalStyles = StyleSheet.create({
     borderRadius: sizes.borderRadius / 5,
     alignSelf: 'center',
   },
+  imageEstadoCita: {
+    width: 50,
+    height: 50,
+    marginBottom: sizes.textInputMargin,
+    borderRadius: sizes.borderRadius / 5,
+    alignSelf: 'center',
+  },
   cardTextContainer: {
     flex: 1,
   },
@@ -398,6 +404,7 @@ textArea: {
   fontSize: 16,
   width: '100%',
   height: 150,
+  color: globalColors.black,
 },
 contenidoCita: {
   flex:1,
@@ -406,5 +413,53 @@ contenidoCita: {
   height: 'auto', 
   borderRadius: 10, 
   alignSelf: 'center',
+},
+containerCitasScreen: {
+  flex: 1,
+  padding: 20,
+  backgroundColor: '#fff',
+},
+citaInfo: {
+  fontSize: 16,
+  marginBottom: 5,
+},
+noDataText: {
+  fontSize: 18,
+  textAlign: 'center',
+  marginTop: 20,
+},
+detailContainer: {
+  marginBottom: 20,
+},
+label: {
+  fontSize: 16,
+  fontWeight: 'bold',
+  marginBottom: 5,
+},
+value: {
+  fontSize: 16,
+  marginBottom: 5,
+},
+input: {
+  borderWidth: 1,
+  borderColor: '#ccc',
+  borderRadius: 5,
+  padding: 10,
+  fontSize: 16,
+},
+picker: {
+  height: 50,
+  width: '100%',
+},
+button: {
+  backgroundColor: globalColors.primary,
+  padding: 15,
+  borderRadius: 5,
+  alignItems: 'center',
+},
+buttonText: {
+  color: '#fff',
+  fontSize: 16,
+  fontWeight: 'bold',
 },
 });

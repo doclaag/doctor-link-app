@@ -3,7 +3,6 @@ import { View, Text, ScrollView, TouchableOpacity, Image, Pressable } from 'reac
 import { Searchbar } from 'react-native-paper';
 import { globalColors, globalStyles } from '../theme';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
-import { StackActions } from '@react-navigation/native';
 import { URL_DOCTORS, API_TOKEN } from '@env';
 import { RootStackParams } from '../routes/StackNavigator';
 import { StackNavigationProp } from '@react-navigation/stack';
