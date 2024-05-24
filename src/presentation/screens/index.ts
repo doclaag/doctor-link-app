@@ -5,3 +5,5 @@ export * from './SignInScreen';
 export * from './SignUpScreen';
 export * from './DoctorInformationScreen';
 export * from './AppointmentTimeScreen';
+export * from './AppointmentSearch';
+export * from './AppointmentDetail';
