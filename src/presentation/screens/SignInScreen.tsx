@@ -6,7 +6,8 @@ import { globalStyles, globalColors } from '../theme';
 import axios from 'axios';
 import { URLTOKEN } from '@env';
 import type { RootStackParams } from '../routes/StackNavigator';
-import { type NavigationProp, useNavigation, DrawerActions } from '@react-navigation/native';
+import { type NavigationProp, useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const SignInScreen = () => {
 
@@ -30,9 +31,11 @@ export const SignInScreen = () => {
         email,
         password
       });
-
+       
       const { access, refresh } = response.data;
       const token = `Bearer ${access || refresh}`;
+      await AsyncStorage.setItem('userToken', token); 
+      console.log(AsyncStorage)
       console.log(token);
       Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión correctamente.');
       navigation.navigate('Search' as never)
