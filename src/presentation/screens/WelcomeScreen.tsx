@@ -12,16 +12,6 @@ export const WelcomeScreen = () => {
 
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Pressable onPress={ () => navigation.dispatch(DrawerActions.toggleDrawer) }>
-          <Text>Menu</Text>
-        </Pressable>
-      ),
-    });
-  }, []);
-
   return (
     <>
       <View style={ globalStyles.centerContainer }>
@@ -34,7 +24,7 @@ export const WelcomeScreen = () => {
         <FAB
         style={ { backgroundColor: '#36CFC9', margin: 10 } }
         icon={ 'log-in-outline' }
-        label={ 'Acceder' }
+        label={ 'Iniciar' }
         onPress={ () => navigation.navigate( 'GetStarted' as never) }
       />
       </View>

@@ -1,25 +1,48 @@
-import React, { useState } from 'react';
-import { View, Text } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Pressable,View, Text, Alert, ActivityIndicator, StyleSheet } from 'react-native';
 import { FAB, TextInput } from 'react-native-paper';
 import { LogoShared } from '../components';
-import { globalStyles } from '../theme';
+import { globalStyles, globalColors } from '../theme';
+import axios from 'axios';
+import { URLTOKEN } from '@env';
+import type { RootStackParams } from '../routes/StackNavigator';
+import { type NavigationProp, useNavigation, DrawerActions } from '@react-navigation/native';
 
 export const SignInScreen = () => {
 
   const [ email, setEmail ] = useState( '' );
   const [ password, setPassword ] = useState( '' );
   const [ showPassword, setShowPassword ] = useState( false );
-
   const [ emailError, setEmailError ] = useState( '' );
-
-  const handleLogin = () => {
-    if ( !validateEmail( email ) ) {
+  const [loading, setLoading] = useState(false);
+  const navigation = useNavigation<NavigationProp<RootStackParams>>();
+ 
+  const handleLogin = async() => {
+    if (!validateEmail(email) ) {
       setEmailError( 'Correo electrónico inválido' );
       return;
     }
-    setEmailError( '' );
-    console.log( 'Email:', email );
-    console.log( 'Password:', password );
+    setEmailError('');
+    setLoading(true);
+
+    try {
+      const response = await axios.post(URLTOKEN, {
+        email,
+        password
+      });
+      console.log('Entra');
+      const { access, refresh } = response.data;
+      const token = `Bearer ${access || refresh}`;
+      console.log(token);
+      Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión correctamente.');
+      navigation.navigate('AppointmentSearch' as never)
+    } catch (error) {
+      console.error('Error al iniciar sesión:', error);
+      Alert.alert('Error', 'No se pudo iniciar sesión. Por favor, revisa tus credenciales.');
+      console.log(URLTOKEN);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const validateEmail = ( email: string ) => {
@@ -28,10 +51,10 @@ export const SignInScreen = () => {
   };
 
   return (
+    <View style={styles.container}>
     <View style={ globalStyles.centerContainer }>
-
-      <LogoShared />
-
+      <LogoShared/>
+      <Text style={globalStyles.welcomeText}>¡Bienvenido de nuevo!</Text>
       <TextInput
         label="Email"
         mode='flat'
@@ -54,7 +77,7 @@ export const SignInScreen = () => {
           placeholder='Escribe tu contraseña'
           textColor='#000'
           autoCapitalize='none'
-          autoCorrect={ false }
+          autoCorrect={false}
           secureTextEntry={ !showPassword }
           value={ password }
           onChangeText={ setPassword }
@@ -66,14 +89,26 @@ export const SignInScreen = () => {
             />
           }
         />
+        
       </View>
-
+      {loading ? (
+        <ActivityIndicator size="large" color="#000" style={{ marginTop: 20 }} />
+      ) : (
       <FAB
         style={ globalStyles.fab }
         icon='log-in-outline'
         label='Iniciar Sesión'
         onPress={ handleLogin }
       />
+      )}
     </View>
+    </View>
+
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'skyblue',
+  },
+});

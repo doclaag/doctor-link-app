@@ -1,6 +1,6 @@
 import React, {  useEffect } from 'react';
-import { Pressable, Text, View } from 'react-native';
-import { type NavigationProp, useNavigation, DrawerActions } from '@react-navigation/native';
+import { View } from 'react-native';
+import { type NavigationProp, useNavigation } from '@react-navigation/native';
 
 import { FAB } from 'react-native-paper';
 
@@ -12,18 +12,6 @@ import type { RootStackParams } from '../routes/StackNavigator';
 export const GetStartedScreen = () => {
 
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
-  
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerLeft: () => (
-        <Pressable onPress={ () => navigation.dispatch(DrawerActions.toggleDrawer) }>
-          <Text>Menu</Text>
-        </Pressable>
-      ),
-    });
-  }, []);
-
 
   return (
     <>
@@ -44,7 +32,7 @@ export const GetStartedScreen = () => {
       />
       
       <FAB
-        style={ { backgroundColor: '#d2dbd2dd', margin: 10, marginBottom: 100,  } }
+        style={ { backgroundColor: '#d2dbd2', margin: 10, marginBottom: 100,  } }
         icon={ 'pencil-outline' }
         label={ 'Registrar' }
         color={ '#000' }

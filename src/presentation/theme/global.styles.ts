@@ -1,12 +1,12 @@
 import { StyleSheet } from 'react-native';
-import { black } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
+import { transparent } from 'react-native-paper/lib/typescript/styles/themes/v2/colors';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 
 export const globalColors = {
   primary: '#36CFC9',
   secondary: '#6D28D9',
   tertiary: '#374151',
-  white: '#fff',
+  white: 'white',
   gris: '#9b9b9b',
   red: 'red',
   black: '#000',
@@ -31,6 +31,8 @@ export const globalStyles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.8)', 
+    padding: 20,
   },
   title: {
     textAlign: 'center',
@@ -105,10 +107,17 @@ export const globalStyles = StyleSheet.create({
   termsText: {
     color: globalColors.tertiary,
     marginLeft: sizes.textInputPadding,
+    fontWeight: 'bold',
+    fontSize: 15,
   },
   accountText: {
     marginTop: sizes.textInputMargin,
     color: globalColors.tertiary,
+    fontSize: 16,
+    textDecorationLine: 'underline',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    padding: 20
   },
   modalContainer: {
     flex: 1,
@@ -153,7 +162,7 @@ export const globalStyles = StyleSheet.create({
     resizeMode: 'cover',
   },
   doctorName: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: 'bold',
     color: Colors.black,
   },
@@ -164,13 +173,15 @@ export const globalStyles = StyleSheet.create({
     margin: 10,
   },
   specialtiesTitle: {
+    marginTop: 10,
     fontSize: 20,
     color: Colors.black,
     fontWeight: 'bold',
   },
   specialtiesList: {
     flex: 1,
-    marginTop: 10,
+    width: '100%',
+    height: 'auto',
   },
   textList:{
     fontSize: 18,
@@ -181,13 +192,20 @@ export const globalStyles = StyleSheet.create({
   },
   bottomContainer: {
     position: 'absolute',
-    bottom: 20,
-    alignSelf: 'flex-start',
-    marginLeft: 20,
+    bottom: 25,
+    marginLeft: 25,
+    width: '40%',
+    height: 60,
+    backgroundColor: globalColors.secondary,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   fabButton: {
-    backgroundColor: globalColors.red, // Color de fondo rojo
-    color: globalColors.gris, // Color del texto gris
+    fontSize: 16, 
+    color: globalColors.white,
+    fontWeight: 'bold',
+    flex: 1,
+    alignItems: 'center',
   },
     personContainer: {
     flexDirection: 'row',
@@ -218,13 +236,13 @@ export const globalStyles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 10,
+    marginTop: 5, // Reducido el margen superior
+    marginBottom: 5, // Reducido el margen inferior
     borderWidth: 1, 
     borderColor: 'lightgray', 
     borderRadius: 10, 
-    padding: 10, 
-    backgroundColor: globalColors.skyblue,
+    padding: 3, 
+    backgroundColor: globalColors.primary,
     shadowColor: "#000",
     shadowOffset: {
         width: 0,
@@ -234,4 +252,214 @@ export const globalStyles = StyleSheet.create({
     shadowRadius: 2.62,
     elevation: 4,
   },
+  centerContainerAppointmentTime: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start',
+    marginTop: 10,
+  },
+  infoContainer: {
+    backgroundColor: globalColors.white,
+    padding: 10,
+    margin: 10,
+    marginTop: 35,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+
+  },
+  titleAppointmentTime: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#333',
+    textAlign: 'center',
+  },
+  infoItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+  },
+  labelNegrita: {
+    fontSize: 16,
+    color: '#555',
+    fontWeight: 'bold',
+  },
+  info: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: globalColors.secondary,
+  },
+  inputContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+  },
+  actionButton: {
+    backgroundColor: Colors.primary,
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  actionButtonText: {
+    color: globalColors.white,
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  timePickerButton: {
+    backgroundColor: globalColors.primary,
+    borderRadius: 5,
+    padding: 10,
+    alignItems: 'center',
+    marginTop: 20, // Agregar margen superior
+    marginBottom: 40,
+  },
+  containerSearchScreen: {
+    flex: 1,
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingTop: 10,
+  },
+  scrollView: {
+    width: '100%',
+  },
+  welcomeText: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    textAlign: 'center',
+    color: globalColors.primary,
+  },
+  cardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: globalColors.white,
+    borderRadius: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 1,
+    width: '100%',
+  },
+  imageSearchDoctor: {
+    width: 80,
+    height: 80,
+    marginBottom: sizes.textInputMargin,
+    borderRadius: sizes.borderRadius / 5,
+    alignSelf: 'center',
+  },
+  imageEstadoCita: {
+    width: 50,
+    height: 50,
+    marginBottom: sizes.textInputMargin,
+    borderRadius: sizes.borderRadius / 5,
+    alignSelf: 'center',
+  },
+  cardTextContainer: {
+    flex: 1,
+  },
+  speciality: {
+    margin: 5,
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: globalColors.gris,
+  },
+  phone: {
+    fontSize: 16,
+    color: globalColors.primary,
+  },
+  searchbar: {
+    marginTop: 15,
+    marginBottom: 15,
+    width: '100%',
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f2f2f2',
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 18,
+    color: '#555',
+    fontWeight: 'bold',
+},
+textArea: {
+  marginTop: 10,
+  padding: 10,
+  borderRadius: 5,
+  borderWidth: 1,
+  borderColor: '#ccc',
+  backgroundColor: '#fff',
+  textAlignVertical: 'top', // Para Android
+  fontSize: 16,
+  width: '100%',
+  height: 150,
+  color: globalColors.black,
+},
+contenidoCita: {
+  flex:1,
+  alignContent: 'center',
+  width: '90%', 
+  height: 'auto', 
+  borderRadius: 10, 
+  alignSelf: 'center',
+},
+containerCitasScreen: {
+  flex: 1,
+  padding: 20,
+  backgroundColor: '#fff',
+},
+citaInfo: {
+  fontSize: 16,
+  marginBottom: 5,
+},
+noDataText: {
+  fontSize: 18,
+  textAlign: 'center',
+  marginTop: 20,
+},
+detailContainer: {
+  marginBottom: 20,
+},
+label: {
+  fontSize: 16,
+  fontWeight: 'bold',
+  marginBottom: 5,
+},
+value: {
+  fontSize: 16,
+  marginBottom: 5,
+},
+input: {
+  borderWidth: 1,
+  borderColor: '#ccc',
+  borderRadius: 5,
+  padding: 10,
+  fontSize: 16,
+},
+picker: {
+  height: 50,
+  width: '100%',
+},
+button: {
+  backgroundColor: globalColors.primary,
+  padding: 15,
+  borderRadius: 5,
+  alignItems: 'center',
+},
+buttonText: {
+  color: '#fff',
+  fontSize: 16,
+  fontWeight: 'bold',
+},
 });
