@@ -5,6 +5,7 @@ import { GetStartedScreen, SearchScreen, SignInScreen, SignUpScreen, WelcomeScre
 import DoctorInformationScreen from '../screens/DoctorInformationScreen';
 import { AppoinmentsDoctorScreen } from '../screens/AppointmentsDoctorScreen';
 
+
 export type RootStackParams = {
   Welcome: undefined;
   GetStarted: undefined;

@@ -47,16 +47,11 @@ export const SearchScreen = () => {
         throw new Error('Token not found');
       }
     const headers = new Headers({
-      'Authorization': storedToken,
+      'Authorization': `${storedToken}`,
       'Content-Type': 'application/json'
     });
 
-    const requestOptions = {
-      method: 'GET',
-      headers: headers
-    };
-
-      const response = await fetch(`${URL_DOCTORS}?page=${page}&limit=8&query=${query}`, requestOptions);
+      const response = await fetch(`${URL_DOCTORS}?page=${page}&limit=8&query=${query}`, {headers});
       const data: Doctor[] = await response.json();
       setDoctors(prevDoctors => (page === 1 ? data : [...prevDoctors, ...data]));
       setDataLength(data.length);

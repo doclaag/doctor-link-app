@@ -18,7 +18,6 @@ export const AppoinmentsDoctorScreen = () => {
   const navigation = useNavigation();
   const [searchPressed, setSearchPressed ] = useState( false );
   const [searchQuery, setSearchQuery] = useState('');
-  const  [allDoctors, setAllDoctors] = useState<Appoinments_Patient[]>([]);
   const [ doctors, setDoctors ] = useState<Appoinments_Patient[]>( [] );
   const [ page, setPage ] = useState( 1 );
 
@@ -40,7 +39,7 @@ export const AppoinmentsDoctorScreen = () => {
         throw new Error('Token not found');
       }
       const headers = new Headers({
-        'Authorization': `Bearer ${storedToken}`,
+        'Authorization': `${storedToken}`,
         'Content-Type': 'application/json'
       });
       const response = await fetch( `${ URL_PATIENT_APPOINTMENTS }?page=${ page }&limit=8&query=${ query }`, { headers } );
