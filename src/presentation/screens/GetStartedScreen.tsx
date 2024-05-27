@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, {  useEffect } from 'react';
 import { Pressable, Text, View } from 'react-native';
 import { type NavigationProp, useNavigation, DrawerActions } from '@react-navigation/native';
 
@@ -8,9 +8,11 @@ import { LogoShared, TitleShared } from '../components';
 import { globalStyles } from '../theme';
 import type { RootStackParams } from '../routes/StackNavigator';
 
+
 export const GetStartedScreen = () => {
 
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
+  
 
   useEffect(() => {
     navigation.setOptions({
@@ -21,6 +23,7 @@ export const GetStartedScreen = () => {
       ),
     });
   }, []);
+
 
   return (
     <>
@@ -50,4 +53,3 @@ export const GetStartedScreen = () => {
     </>
   );
 };
-

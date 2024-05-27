@@ -1,58 +1,86 @@
-import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { StyleSheet, View, Text, ScrollView, Button } from 'react-native';
 import { Searchbar } from 'react-native-paper';
-import { Image } from 'react-native';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { globalColors, globalStyles } from '../theme';
+import { URL_DOCTORS } from '@env';
+import { DoctorTagShared } from '../components';
+
+interface Doctor {
+  name: string;
+  last_name: string;
+  speciality: string;
+  phone: string;
+  no_collegiate: string;
+}
 
 export const SearchScreen = () => {
-  const [searchQuery, setSearchQuery] = React.useState('');
-  
+
+  const [ searchQuery, setSearchQuery ] = useState( '' );
+  const [ doctors, setDoctors ] = useState<Doctor[]>( [] );
+  const [ page, setPage ] = useState( 1 );
+  const [ searchPressed, setSearchPressed ] = useState( false );
+
+
+  const consultAPI = useCallback( async ( page: number, query: string ) => {
+    try {
+      const response = await fetch( `${ URL_DOCTORS }?page=${ page }&limit=8&query=${ query }` );
+      const data: Doctor[] = await response.json();
+      setDoctors( prevDoctors => [ ...prevDoctors, ...data ] );
+    } catch ( error ) {
+      console.error( error );
+      // TODO: Handle error in a user-friendly way
+    }
+  }, [] );
+
+  useEffect( () => {
+    consultAPI( page, searchQuery );
+  }, [ consultAPI, page ] );
+
+  useEffect( () => {
+    if ( searchPressed ) {
+      consultAPI( page, searchQuery );
+      setSearchPressed( false );
+    }
+  }, [ consultAPI, page, searchPressed ] );
+
+  const handleScroll = ( event: { nativeEvent: { contentOffset: { y: number; }; layoutMeasurement: { height: number; }; contentSize: { height: number; }; }; } ) => {
+    if ( event.nativeEvent.contentOffset.y + event.nativeEvent.layoutMeasurement.height >= event.nativeEvent.contentSize.height ) {
+      setPage( prevPage => prevPage + 1 );
+    }
+  };
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.welcomeText}>Bienvenido {'usuario'}</Text>
-      <Text style={styles.subtitle}>Busca el doctor que más se adapte a tus necesidades</Text>
-        
+    <View style={ styles.container }>
+      <Text style={ styles.welcomeText }>Bienvenido { 'usuario' }</Text>
+      <Text style={ styles.subtitle }>Busca el doctor que más se adapte a tus necesidades</Text>
+
       <Searchbar
         placeholder="Buscar doctor"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-        icon={'search-circle-outline'}
-        style={{marginTop: 15}}
+        onChangeText={ setSearchQuery }
+        value={ searchQuery }
+        icon={ 'search-circle-outline' }
       />
 
-      {/* Integración del componente de etiqueta de persona */}
-      <PersonTag 
-        name="Nombre del Doctor" 
-        description="Descripción del doctor o cualquier cosa" 
-        location="Ubicación del doctor" 
-        imageSource={require('./assets/img/doctor.png')} // Ruta relativa al directorio del proyecto
-      />
+      <ScrollView style={ styles.scrollView } onScroll={ handleScroll }>
+        { doctors.filter( doctor => {
+          const fullName = `${ doctor.name } ${ doctor.last_name }`;
+          return fullName.toLowerCase().includes( searchQuery.toLowerCase() );
+        } ).map( ( doctor, index ) => (
+          <View style={ globalStyles.cardContainer } key={ index }>
+            <DoctorTagShared
+              name={ `${ doctor.name } ${ doctor.last_name }` }
+              speciality={ doctor.speciality }
+              phone={ doctor.phone }
+              imageSource={ require( '../../assets/img/doctor.png' ) }
+            />
+          </View>
+        ) ) }
+      </ScrollView>
     </View>
   );
 };
 
-// Componente para la etiqueta de la persona
-const PersonTag = ({ name, description, location, imageSource }: { 
-  name: string; 
-  description: string; 
-  location: string; 
-  imageSource: any 
-}) => {
-  return (
-    <View style={styles.personContainer}>
-      <View style={styles.imageContainer}>
-        <Image source={imageSource} style={styles.image} />
-      </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.name}>{name}</Text>
-        <Text style={styles.description}>{description}</Text>
-        <Text style={styles.location}>{location}</Text>
-      </View>
-    </View>
-  );
-};
-
-const styles = StyleSheet.create({
+const styles = StyleSheet.create( {
   container: {
     flex: 1,
     justifyContent: 'flex-start',
@@ -60,157 +88,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingTop: 10,
   },
+  scrollView: {
+    width: '100%',
+  },
   welcomeText: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
+    color: globalColors.primary,
   },
   subtitle: {
     fontSize: 18,
     textAlign: 'justify',
+    color: globalColors.secondary,
   },
-  personContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  imageContainer: {
-    marginRight: 10,
-  },
-  image: {
-    width: 60,
-    height: 60,
-    borderRadius: 30, // Para hacerla circular
-  },
-  textContainer: {
-    flex: 1,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  description: {
-    fontSize: 14,
-    color: 'gray',
-  },
-  location: {
-    fontSize: 14,
-    color: 'gray',
-  },
-});
-
-
-
-
-
-
-  /* 
-  
-  import React from 'react';
-import { View, StyleSheet } from 'react-native';
-
-import { CommonActions } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, BottomNavigation } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-const Tab = createBottomTabNavigator();
-
-export default function MyComponent() {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
-      tabBar={({ navigation, state, descriptors, insets }) => (
-        <BottomNavigation.Bar
-          navigationState={state}
-         safeAreaInsets={insets}
-          onTabPress={({ route, preventDefault }) => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
-
-            if (event.defaultPrevented) {
-              preventDefault();
-            } else {
-             navigation.dispatch({
-                ...CommonActions.navigate(route.name, route.params),
-                target: state.key,
-              });
-            }
-          }}
-          renderIcon={({ route, focused, color }) => {
-            const { options } = descriptors[route.key];
-            if (options.tabBarIcon) {
-              return options.tabBarIcon({ focused, color, size: 24 });
-            }
-
-            return null;
-          }}
-          getLabelText={({ route }) => {
-            const { options } = descriptors[route.key];
-            const label =
-              options.tabBarLabel !== undefined
-                ? options.tabBarLabel
-                : options.title !== undefined
-                ? options.title
-                : route.title;
-
-            return label;
-          }}
-        />
-      )}
-    >
-      <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarLabel: 'Home',
-          tabBarIcon: ({ color, size }) => {
-            return <Icon name="home" size={size} color={color} />;
-          },
-        }}
-      />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          tabBarLabel: 'Settings',
-          tabBarIcon: ({ color, size }) => {
-            return <Icon name="cog" size={size} color={color} />;
-          },
-        }}
-      />
-    </Tab.Navigator>
-  );
-}
-
-function HomeScreen() {
-  return (
-    <View style={styles.container}>
-      <Text variant="headlineMedium">Home!</Text>
-    </View>
-  );
-}
-
-function SettingsScreen() {
-  return (
-    <View style={styles.container}>
-      <Text variant="headlineMedium">Settings!</Text>
-    </View>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-  
-  */
+} );
