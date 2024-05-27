@@ -193,14 +193,15 @@ export const globalStyles = StyleSheet.create({
   bottomContainer: {
     position: 'absolute',
     bottom: 25,
-    alignSelf: 'flex-start',
     marginLeft: 25,
     width: '40%',
     height: 60,
     backgroundColor: globalColors.secondary,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   fabButton: {
-    fontSize: 15, 
+    fontSize: 16, 
     color: globalColors.white,
     fontWeight: 'bold',
     flex: 1,
@@ -254,9 +255,8 @@ export const globalStyles = StyleSheet.create({
   centerContainerAppointmentTime: {
     flex: 1,
     justifyContent: 'flex-start',
-    alignItems: 'center',
-    flexGrow: 1, 
-    marginTop: 35,
+    alignItems: 'flex-start',
+    marginTop: 10,
   },
   infoContainer: {
     backgroundColor: globalColors.white,
@@ -317,6 +317,7 @@ export const globalStyles = StyleSheet.create({
     padding: 10,
     alignItems: 'center',
     marginTop: 20, // Agregar margen superior
+    marginBottom: 40,
   },
   containerSearchScreen: {
     flex: 1,
@@ -355,6 +356,13 @@ export const globalStyles = StyleSheet.create({
     borderRadius: sizes.borderRadius / 5,
     alignSelf: 'center',
   },
+  imageEstadoCita: {
+    width: 50,
+    height: 50,
+    marginBottom: sizes.textInputMargin,
+    borderRadius: sizes.borderRadius / 5,
+    alignSelf: 'center',
+  },
   cardTextContainer: {
     flex: 1,
   },
@@ -384,5 +392,74 @@ export const globalStyles = StyleSheet.create({
     fontSize: 18,
     color: '#555',
     fontWeight: 'bold',
+},
+textArea: {
+  marginTop: 10,
+  padding: 10,
+  borderRadius: 5,
+  borderWidth: 1,
+  borderColor: '#ccc',
+  backgroundColor: '#fff',
+  textAlignVertical: 'top', // Para Android
+  fontSize: 16,
+  width: '100%',
+  height: 150,
+  color: globalColors.black,
+},
+contenidoCita: {
+  flex:1,
+  alignContent: 'center',
+  width: '90%', 
+  height: 'auto', 
+  borderRadius: 10, 
+  alignSelf: 'center',
+},
+containerCitasScreen: {
+  flex: 1,
+  padding: 20,
+  backgroundColor: '#fff',
+},
+citaInfo: {
+  fontSize: 16,
+  marginBottom: 5,
+},
+noDataText: {
+  fontSize: 18,
+  textAlign: 'center',
+  marginTop: 20,
+},
+detailContainer: {
+  marginBottom: 20,
+},
+label: {
+  fontSize: 16,
+  fontWeight: 'bold',
+  marginBottom: 5,
+},
+value: {
+  fontSize: 16,
+  marginBottom: 5,
+},
+input: {
+  borderWidth: 1,
+  borderColor: '#ccc',
+  borderRadius: 5,
+  padding: 10,
+  fontSize: 16,
+},
+picker: {
+  height: 50,
+  width: '100%',
+},
+button: {
+  backgroundColor: globalColors.primary,
+  padding: 15,
+  borderRadius: 5,
+  alignItems: 'center',
+},
+buttonText: {
+  color: '#fff',
+  fontSize: 16,
+  fontWeight: 'bold',
 },
 });
