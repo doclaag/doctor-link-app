@@ -6,7 +6,7 @@ import { Button, IconButton } from 'react-native-paper';
 import { TimePickerModal, registerTranslation } from 'react-native-paper-dates';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParams } from '../routes/StackNavigator';
-import { URL_APPOINTMENT_CREATE, API_TOKEN } from '@env';
+import { URL_APPOINTMENT_CREATE} from '@env';
 import moment from 'moment';
 import 'moment/locale/es';
 
@@ -14,7 +14,7 @@ import { TitleShared } from '../components';
 import { globalStyles } from '../theme';
 import axios from 'axios';
 import { StackNavigationProp } from '@react-navigation/stack';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 registerTranslation('es', {
   save: 'Guardar',
@@ -140,13 +140,15 @@ export const AppointmentTimeScreen = () => {
     };
 
     try {
+      const storedToken = await AsyncStorage.getItem('userToken');
+      if (!storedToken) {
+        throw new Error('Token not found');
+      }
       const URL = `${URL_APPOINTMENT_CREATE}${doctorId}/`;
-      console.log(URL, appointmentData);
-      console.log(API_TOKEN);
       const response = await axios.post(URL, appointmentData, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${API_TOKEN}`,
+          'Authorization': `${storedToken}`,
         },
       });
 

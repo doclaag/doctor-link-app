@@ -17,7 +17,7 @@ export const SignInScreen = () => {
   const [ emailError, setEmailError ] = useState( '' );
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
- 
+  
   const handleLogin = async() => {
     if (!validateEmail(email) ) {
       setEmailError( 'Correo electrónico inválido' );

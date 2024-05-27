@@ -39,7 +39,7 @@ const DoctorInformationScreen = () => {
       }
 
       const headers = new Headers({
-        'Authorization': storedToken,
+        'Authorization': `${storedToken}`,
         'Content-Type': 'application/json'
       });
         const response = await fetch(`${URL_DOCTORS_ID}${doctorId}`, { method: 'GET', headers });

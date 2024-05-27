@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState, useLayoutEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Button } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { globalStyles, globalColors } from '../theme';
-import { URL_APPOINTMENT, API_TOKEN } from '@env';
+import { URL_APPOINTMENT } from '@env';
 import { useNavigation } from '@react-navigation/native';
 import type { NavigationProp } from '@react-navigation/native';
 import type { RootStackParams } from '../routes/StackNavigator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface Appointment {
   id: string;
@@ -28,25 +29,41 @@ export const AppointmentSearch = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [citas, setCitas] = useState<Appointment[]>([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
   const consultAPI = useCallback(async (page: number, query: string) => {
-    const headers = new Headers({
-      'Authorization': `Bearer ${API_TOKEN}`,
-      'Content-Type': 'application/json'
-    });
-
-    const requestOptions = {
-      method: 'GET',
-      headers: headers
-    };
-
+    setLoading(true); 
     try {
-      const response = await fetch(`${URL_APPOINTMENT}?page=${page}&query=${query}`, requestOptions);
-      const data: Appointment[] = await response.json();
-      setCitas(prevCitas => (page === 1 ? data : [...prevCitas, ...data]));
+      const storedToken = await AsyncStorage.getItem('userToken');
+      if (!storedToken) {
+        throw new Error('Token not found');
+      }
+      console.log('Stored token:', storedToken); // Verificar el token almacenado
+
+      const headers = new Headers({
+        'Authorization': `${storedToken}`,
+        'Content-Type': 'application/json'
+      });
+
+      const response = await fetch(`${URL_APPOINTMENT}?page=${page}&limit=&query=${query}`, {headers} );
+      const data = await response.json();
+      if (response.ok) {
+        if (Array.isArray(data)) {
+        setCitas(prevCitas => (page === 1 ? data : [...prevCitas, ...data]));
+      } else {
+        console.error('Unexpected response data:', data);
+        setCitas([]);
+      }
+    } else {
+      console.error('Error response:', data);
+      setCitas([]);
+    }
     } catch (error) {
       console.error(error);
+      setCitas([]);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -108,30 +125,37 @@ export const AppointmentSearch = () => {
         style={globalStyles.searchbar}
       />
 
-      <ScrollView style={globalStyles.scrollView}>
-        {citas.map((cita) => (
-          <TouchableOpacity
-            key={cita.id}
-            style={globalStyles.cardContainer}
-            onPress={() => navigation.navigate('AppointmentDetail', { appointment: cita })}
-          >
-            <View style={globalStyles.cardContent}>
-              <Image
-                source={getStatusImage(cita.is_active_display)}
-                style={globalStyles.imageEstadoCita}
-              />
-              <View style={globalStyles.cardTextContainer}>
-                <View style={[{ marginLeft: 10 }]}>
-                  <Text style={globalStyles.doctorName}>{`${cita.doctor.name} ${cita.doctor.last_name}`}</Text>
-                  <Text style={globalStyles.speciality}>{`${cita.date} ${cita.time}`}</Text>
-                  <Text style={[globalStyles.phone, { marginLeft: 5, color: globalColors.black }]}>{cita.observation}</Text>
-                  <Text style={[globalStyles.phone, { marginLeft: 5, color: globalColors.black }]}>{cita.is_active_display}</Text>
+      {loading ? (
+        <View style={globalStyles.loadingContainer}>
+          <ActivityIndicator size="large" color={globalColors.primary} />
+          <Text style={globalStyles.loadingText}>Cargando...</Text>
+        </View>
+      ) : (
+        <ScrollView style={globalStyles.scrollView}>
+          {citas.map((cita) => (
+            <TouchableOpacity
+              key={cita.id}
+              style={globalStyles.cardContainer}
+              onPress={() => navigation.navigate('AppointmentDetail', { appointment: cita })}
+            >
+              <View style={globalStyles.cardContent}>
+                <Image
+                  source={getStatusImage(cita.is_active_display)}
+                  style={globalStyles.imageEstadoCita}
+                />
+                <View style={globalStyles.cardTextContainer}>
+                  <View style={[{ marginLeft: 10 }]}>
+                    <Text style={globalStyles.doctorName}>{`${cita.doctor.name} ${cita.doctor.last_name}`}</Text>
+                    <Text style={globalStyles.speciality}>{`${cita.date} ${cita.time}`}</Text>
+                    <Text style={[globalStyles.phone, { marginLeft: 5, color: globalColors.black }]}>{cita.observation}</Text>
+                    <Text style={[globalStyles.phone, { marginLeft: 5, color: globalColors.black }]}>{cita.is_active_display}</Text>
+                  </View>
                 </View>
               </View>
-            </View>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      )}
     </View>
   );
 };
