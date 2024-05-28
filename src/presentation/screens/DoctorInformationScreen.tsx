@@ -3,11 +3,12 @@ import { View, Text, Image, ActivityIndicator, StyleSheet } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { globalStyles, globalColors } from '../theme';
 import { Button } from 'react-native-paper';
-import { URL_DOCTORS_ID, API_TOKEN } from '@env';
+import { URL_DOCTORS_ID } from '@env';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParams } from '../routes/StackNavigator';
 import * as Animatable from 'react-native-animatable';
 import { StackNavigationProp } from '@react-navigation/stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type DoctorInformationScreenRouteProp = RouteProp<RootStackParams, 'DoctorInformation'>;
 
@@ -31,16 +32,19 @@ const DoctorInformationScreen = () => {
 
   useEffect(() => {
     const fetchDoctorData = async () => {
+      try{
+      const storedToken = await AsyncStorage.getItem('userToken');
+        if (!storedToken) {
+          throw new Error('Token not found');
+      }
+
       const headers = new Headers({
-        'Authorization': `Bearer ${API_TOKEN}`,
+        'Authorization': `${storedToken}`,
         'Content-Type': 'application/json'
       });
-
-      try {
         const response = await fetch(`${URL_DOCTORS_ID}${doctorId}`, { method: 'GET', headers });
         const data: Doctor = await response.json();
         setDoctor(data);
-        console.log(data);
       } catch (error) {
         console.error(error);
       } finally {

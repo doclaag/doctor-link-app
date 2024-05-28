@@ -1,13 +1,15 @@
 import React, { useCallback, useEffect, useState, useLayoutEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Alert } from 'react-native';
-import { Modal, Button, Provider as PaperProvider, Portal, Searchbar } from 'react-native-paper';
+import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
+import { Searchbar } from 'react-native-paper';
 import { globalStyles, globalColors } from '../theme';
 import { URL_APPOINTMENT_DOCTOR, URL_APPOINTMENT_PATIENT, API_TOKEN, URL_APPOINTMENT_EDIT } from '@env';
 import { useNavigation } from '@react-navigation/native';
 import type { NavigationProp } from '@react-navigation/native';
 import type { RootStackParams } from '../routes/StackNavigator';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import FlashMessage, { showMessage } from 'react-native-flash-message';
 import axios from 'axios';
-
+        
 interface Appointment {
   id: string;
   doctor: {
@@ -31,14 +33,26 @@ export const AppointmentSearch = () => {
   const [citas, setCitas] = useState<Appointment[]>([]);
   const [selectedCita, setSelectedCita] = useState<Appointment | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
   const opcion = false;
 
   const consultAPI = useCallback(async (page: number, query: string) => {
-    const headers = new Headers({
-      'Authorization': `Bearer ${API_TOKEN}`,
-      'Content-Type': 'application/json'
-    });
+    setLoading(true); 
+    try {
+      const storedToken = await AsyncStorage.getItem('userToken');
+      if (!storedToken) {
+        throw new Error('Token not found');
+      }
+      console.log('Stored token:', storedToken);
+      showMessage({
+        message: "Inicio de sesión exitoso",
+        description: "Has iniciado sesión correctamente.",
+        type: "success",
+        duration: 5000,
+      });
 
     const requestOptions = {
       method: 'GET',
@@ -58,8 +72,30 @@ export const AppointmentSearch = () => {
       const data: Appointment[] = await response.json();
       setCitas(prevCitas => (page === 1 ? data : [...prevCitas, ...data]));
       console.log(data);
+      
+      const headers = new Headers({
+        'Authorization': `${storedToken}`,
+        'Content-Type': 'application/json'
+      });
+
+      const response = await fetch(`${URL_APPOINTMENT}?page=${page}&limit=&query=${query}`, {headers} );
+      const data = await response.json();
+      if (response.ok) {
+        if (Array.isArray(data)) {
+        setCitas(prevCitas => (page === 1 ? data : [...prevCitas, ...data]));
+      } else {
+        console.error('Unexpected response data:', data);
+        setCitas([]);
+      }
+    } else {
+      console.error('Error response:', data);
+      setCitas([]);
+    }
     } catch (error) {
       console.error(error);
+      setCitas([]);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -162,20 +198,27 @@ export const AppointmentSearch = () => {
   }, [navigation]);
 
   return (
-    <PaperProvider>
-      <View style={globalStyles.containerCitasScreen}>
-        <Text style={globalStyles.welcomeText}>
-          Bienvenido <Text style={[globalStyles.welcomeText, { color: globalColors.secondary }]}>Pedro Pablo Celada</Text> a tus citas.
-        </Text>
 
-        <Searchbar
-          placeholder="Buscar cita por fecha"
-          onChangeText={setSearchQuery}
-          value={searchQuery}
-          icon={'lock-clock'}
-          style={globalStyles.searchbar}
-        />
+    <View style={globalStyles.containerCitasScreen}>
+      <Text style={globalStyles.welcomeText}>
+        Bienvenido <Text style={[globalStyles.welcomeText, { color: globalColors.secondary }]}>Pedro Pablo Celada</Text> a tus citas.
+      </Text>
 
+      <Searchbar
+        placeholder="Buscar cita por fecha"
+        onChangeText={setSearchQuery}
+        value={searchQuery}
+        icon={'search'}
+        style={globalStyles.searchbar}
+      />
+
+      {loading ? (
+        <View style={globalStyles.loadingContainer}>
+          <ActivityIndicator size="large" color={globalColors.primary} />
+          <Text style={globalStyles.loadingText}>Cargando...</Text>
+        </View>
+      ) : (
+        
         <ScrollView style={globalStyles.scrollView}>
           {citas.map((cita) => (
             <TouchableOpacity
@@ -200,7 +243,6 @@ export const AppointmentSearch = () => {
             </TouchableOpacity>
           ))}
         </ScrollView>
-
         <Portal>
           <Modal visible={modalVisible} onDismiss={() => setModalVisible(false)} contentContainerStyle={globalStyles.modalContainer}>
             <Text style={[globalStyles.welcomeText, {color: globalColors.secondary}]}>Selecciona una opción</Text>
@@ -217,6 +259,9 @@ export const AppointmentSearch = () => {
         </Portal>
       </View>
     </PaperProvider>
+      )}
+      <FlashMessage position="top" />
+    </View>
   );
 };
 
