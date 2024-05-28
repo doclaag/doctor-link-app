@@ -1,7 +1,7 @@
 import { useWindowDimensions, View, Image, Text, TouchableOpacity, Alert } from 'react-native';
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { StackNavigator  } from './';
-import { SearchScreen, WelcomeScreen, AppointmentTimeScreen, AppointmentSearch, } from '../screens';
+import { SearchScreen, WelcomeScreen, AppointmentTimeScreen, AppointmentSearch, SignUpDoctorScreen, } from '../screens';
 import { globalColors, globalStyles } from '../theme/global.styles';
 import { AppoinmentsDoctorScreen } from '../screens/AppointmentsDoctorScreen';
 import DoctorInformationScreen from '../screens/DoctorInformationScreen';
@@ -41,6 +41,7 @@ export const SideMenuNavigator = () =>  {
       <Drawer.Screen name="Editar perfil" component={EditPersonalInformation} />
       <Drawer.Screen name="Programar Cita" component={AppointmentTimeScreen} />
       <Drawer.Screen name="Ver citas" component={AppointmentSearch} />
+      <Drawer.Screen name="Registrar Doctor" component={SignUpDoctorScreen} />
     </Drawer.Navigator>
   );
 }
