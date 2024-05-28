@@ -39,7 +39,7 @@ export const AppoinmentsDoctorScreen = () => {
         throw new Error('Token not found');
       }
       const headers = new Headers({
-        'Authorization': `${storedToken}`,
+        'Authorization': `Bearer ${storedToken}`,
         'Content-Type': 'application/json'
       });
       const response = await fetch( `${ URL_PATIENT_APPOINTMENTS }?page=${ page }&limit=8&query=${ query }`, { headers } );

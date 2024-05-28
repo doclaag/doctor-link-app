@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import type { NavigationProp } from '@react-navigation/native';
 import type { RootStackParams } from '../routes/StackNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FlashMessage, { showMessage } from 'react-native-flash-message';
 
 interface Appointment {
   id: string;
@@ -39,7 +40,13 @@ export const AppointmentSearch = () => {
       if (!storedToken) {
         throw new Error('Token not found');
       }
-      console.log('Stored token:', storedToken); // Verificar el token almacenado
+      console.log('Stored token:', storedToken);
+      showMessage({
+        message: "Inicio de sesión exitoso",
+        description: "Has iniciado sesión correctamente.",
+        type: "success",
+        duration: 5000,
+      });
 
       const headers = new Headers({
         'Authorization': `${storedToken}`,
@@ -156,6 +163,7 @@ export const AppointmentSearch = () => {
           ))}
         </ScrollView>
       )}
+      <FlashMessage position="top" />
     </View>
   );
 };

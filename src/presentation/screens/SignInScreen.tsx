@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Pressable,View, Text, Alert, ActivityIndicator, StyleSheet } from 'react-native';
+import { Pressable,View, Text, Alert, ActivityIndicator, StyleSheet,TouchableOpacity } from 'react-native';
 import { FAB, TextInput } from 'react-native-paper';
 import { LogoShared } from '../components';
-import { globalStyles, globalColors } from '../theme';
+import { globalStyles } from '../theme';
 import axios from 'axios';
 import { URLTOKEN } from '@env';
 import type { RootStackParams } from '../routes/StackNavigator';
 import { type NavigationProp, useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FlashMessage, { showMessage } from 'react-native-flash-message';
 
 export const SignInScreen = () => {
 
@@ -18,6 +19,18 @@ export const SignInScreen = () => {
   const [loading, setLoading] = useState(false);
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
   
+  useEffect(() => {
+    const checkUserToken = async () => {
+      const token = await AsyncStorage.getItem('userToken');
+      if (token) {
+        // navigation.navigate('Search' as never);
+        return;
+      }
+    };
+
+    checkUserToken();
+  }, [navigation]);
+
   const handleLogin = async() => {
     if (!validateEmail(email) ) {
       setEmailError( 'Correo electrónico inválido' );
@@ -37,13 +50,21 @@ export const SignInScreen = () => {
       await AsyncStorage.setItem('userToken', token); 
       console.log(AsyncStorage)
       console.log(token);
-      Alert.alert('Inicio de sesión exitoso', 'Has iniciado sesión correctamente.');
-      navigation.navigate('AppointmentSearch' as never)
+      showMessage({
+        message: "Inicio de sesión exitoso",
+        description: "Has iniciado sesión correctamente.",
+        type: "success",
+        duration: 5000
+      });
+      navigation.navigate('AppointmentSearch' as never);
     } catch (error) {
       console.error('Error al iniciar sesión:', error);
-      Alert.alert('Error', 'No se pudo iniciar sesión. Por favor, revisa tus credenciales.');
-      console.log(URLTOKEN);
-    } finally {
+      showMessage({
+        message: "Error",
+        description: "No se pudo iniciar sesión. Por favor, revisa tus credenciales.",
+        type: "danger",
+        duration: 2000
+      });    } finally {
       setLoading(false);
     }
   };
@@ -104,9 +125,12 @@ export const SignInScreen = () => {
         onPress={ handleLogin }
       />
       )}
+        <TouchableOpacity onPress={() => navigation.navigate('SignUp' as never)}>
+          <Text style={globalStyles.accountText}>¿No tienes una cuenta?</Text>
+        </TouchableOpacity>
     </View>
+    <FlashMessage position="top" />
     </View>
-
   );
 };
 const styles = StyleSheet.create({
