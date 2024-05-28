@@ -137,6 +137,7 @@ export const AppointmentTimeScreen = () => {
       date: formattedDate,
       observation: observation,
       time: formattedTime,
+      doctor_id: doctorId,
     };
 
     try {

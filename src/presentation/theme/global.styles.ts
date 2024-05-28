@@ -462,4 +462,7 @@ buttonText: {
   fontSize: 16,
   fontWeight: 'bold',
 },
+modalButton: {
+  marginTop: 10,
+},
 });
