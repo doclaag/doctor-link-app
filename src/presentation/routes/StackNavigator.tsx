@@ -14,7 +14,7 @@ export type RootStackParams = {
   DoctorInformation: { doctorId: string };
   DoctorInformationScreen: {doctorId: string };
   AppointmentTime: { doctorId: string };
-  AppointmentDetail: { appointment: any }; // Añade la nueva pantalla aquí
+  AppointmentDetail: { appointment: any, isDoctor: boolean }; // Añade la nueva pantalla aquí
   AppointmentSearch: undefined;
   AppoinmentsDoctor: undefined;
 };

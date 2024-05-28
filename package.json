@@ -10,7 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.23.1",
+    "@react-native-community/datetimepicker": "^8.0.1",
     "@react-native-masked-view/masked-view": "^0.3.1",
+    "@react-native-picker/picker": "^2.7.6",
     "@react-navigation/drawer": "^6.6.15",
     "@react-navigation/stack": "^6.3.29",
     "axios": "^1.6.8",
@@ -19,6 +22,7 @@
     "react-native-animatable": "^1.4.0",
     "react-native-calendars": "^1.1304.1",
     "react-native-gesture-handler": "^2.13.4",
+    "react-native-modal-datetime-picker": "^17.1.0",
     "react-native-paper": "^5.12.3",
     "react-native-paper-dates": "^0.22.7",
     "react-native-reanimated": "^3.6.2",
