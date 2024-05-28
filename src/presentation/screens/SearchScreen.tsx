@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, Pressable } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, Pressable, Alert, BackHandler } from 'react-native';
 import { Searchbar } from 'react-native-paper';
 import { globalColors, globalStyles } from '../theme';
-import { useNavigation, DrawerActions } from '@react-navigation/native';
-import { StackActions } from '@react-navigation/native';
+import { NavigationProp,useNavigation, DrawerActions } from '@react-navigation/native';
 import { URL_DOCTORS } from '@env';
 import { RootStackParams } from '../routes/StackNavigator';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -26,9 +25,8 @@ export const SearchScreen = () => {
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [page, setPage] = useState(1);
   const [dataLength, setDataLength] = useState(1);
-  
   const navigation1 = useNavigation<SearchScreenNavigationProp>();
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParams>>();
 
   useEffect(() => {
     navigation.setOptions({
@@ -39,12 +37,33 @@ export const SearchScreen = () => {
       ),
     });
   }, [navigation]);
+  /* useEffect(() => {
+    const backAction = () => {
+      Alert.alert('Confirmación', '¿Está seguro de que desea salir de la aplicación?', [
+        {
+          text: 'Cancelar',
+          style: 'cancel',
+        },
+        {
+          text: 'Sí',
+          onPress: () => BackHandler.exitApp(),
+        },
+      ]);
+      return true;
+    };
+    
+    const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+    return () => backHandler.remove();
+  }, []); */
 
   const consultAPI = useCallback(async (page: number, query: string) => {
     try {
       const storedToken = await AsyncStorage.getItem('userToken');
       if (!storedToken) {
-        throw new Error('Token not found');
+        await AsyncStorage.removeItem('userToken');
+        navigation.navigate('SignIn');
+        return;
       }
     const headers = new Headers({
       'Authorization': `${storedToken}`,
