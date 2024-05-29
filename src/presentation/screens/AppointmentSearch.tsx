@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useLayoutEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator } from 'react-native';
-import { Searchbar } from 'react-native-paper';
+import { View, Text, ScrollView, TouchableOpacity, Image, ActivityIndicator, Alert } from 'react-native';
+import { Button, Modal, PaperProvider, Portal, Searchbar } from 'react-native-paper';
 import { globalStyles, globalColors } from '../theme';
 import { URL_APPOINTMENT_DOCTOR, URL_APPOINTMENT_PATIENT, API_TOKEN, URL_APPOINTMENT_EDIT } from '@env';
 import { useNavigation } from '@react-navigation/native';
@@ -9,7 +9,7 @@ import type { RootStackParams } from '../routes/StackNavigator';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FlashMessage, { showMessage } from 'react-native-flash-message';
 import axios from 'axios';
-        
+
 interface Appointment {
   id: string;
   doctor: {
@@ -33,11 +33,11 @@ export const AppointmentSearch = () => {
   const [citas, setCitas] = useState<Appointment[]>([]);
   const [selectedCita, setSelectedCita] = useState<Appointment | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
-  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [isDoctor, setIsDoctor] = useState(false); // Variable global para determinar si es doctor o paciente
 
   const navigation = useNavigation<NavigationProp<RootStackParams>>();
-  const opcion = false;
+  const opcion = true;
 
   const consultAPI = useCallback(async (page: number, query: string) => {
     setLoading(true); 
@@ -54,43 +54,38 @@ export const AppointmentSearch = () => {
         duration: 5000,
       });
 
-    const requestOptions = {
-      method: 'GET',
-      headers: headers
-    };
-    try {
-
-      var url = "";
-      if (opcion) {
-        url = `${URL_APPOINTMENT_DOCTOR}?page=${page}&query=${query}`;
-      }{
-        url = URL_APPOINTMENT_PATIENT;
-
-      }
-      console.log(url);
-      const response = await fetch(url, requestOptions);
-      const data: Appointment[] = await response.json();
-      setCitas(prevCitas => (page === 1 ? data : [...prevCitas, ...data]));
-      console.log(data);
-      
       const headers = new Headers({
         'Authorization': `${storedToken}`,
         'Content-Type': 'application/json'
       });
 
-      const response = await fetch(`${URL_APPOINTMENT}?page=${page}&limit=&query=${query}`, {headers} );
-      const data = await response.json();
+      let url = URL_APPOINTMENT_DOCTOR;
+      console.log(url);
+
+      let response = await fetch(`${url}?page=${page}&limit=&query=${query}`, { headers });
+      let data = await response.json();
+      console.log(response.ok);
       if (response.ok) {
-        if (Array.isArray(data)) {
-        setCitas(prevCitas => (page === 1 ? data : [...prevCitas, ...data]));
+        setCitas(data);
+        setIsDoctor(true); // Si la petición a la URL_APPOINTMENT_DOCTOR es exitosa, isDoctor se establece en true
       } else {
-        console.error('Unexpected response data:', data);
-        setCitas([]);
+        // Si la petición a la URL_APPOINTMENT_DOCTOR falla, intentamos con la URL_APPOINTMENT_PATIENT
+        url = URL_APPOINTMENT_PATIENT;
+        console.log(url);
+        
+        response = await fetch(`${url}?page=${page}&limit=&query=${query}`, { headers });
+        data = await response.json();
+        if (response.ok) {
+          setCitas(data);
+          setIsDoctor(false); // Si la petición a la URL_APPOINTMENT_PATIENT es exitosa, isDoctor se establece en false
+        } else {
+          // Si ambas peticiones fallan, mostramos un error
+          console.error('Error response:', data);
+          setCitas([]);
+        }
       }
-    } else {
-      console.error('Error response:', data);
-      setCitas([]);
-    }
+
+      console.log(isDoctor);
     } catch (error) {
       console.error(error);
       setCitas([]);
@@ -98,9 +93,33 @@ export const AppointmentSearch = () => {
       setLoading(false);
     }
   }, []);
+  
+  const fetchAppointments = useCallback(() => {
+    consultAPI(1, '');
+  }, [consultAPI]);
+
+  useEffect(() => {
+    fetchAppointments(); // Llamar a la función cuando se monta el componente
+  }, [fetchAppointments]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      fetchAppointments(); // Llamar a la función cuando se regrese a este componente
+    });
+    return unsubscribe;
+  }, [navigation, fetchAppointments]);
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    const filteredAppointments = citas.filter(cita => {
+      const doctorName = `${cita.doctor.name} ${cita.doctor.last_name}`.toLowerCase();
+      return doctorName.includes(query.toLowerCase());
+    });
+    setCitas(filteredAppointments);
+  };
 
   const handlePressCita = (cita: Appointment) => {
-    if (opcion) {
+    if (isDoctor) {
       navigation.navigate('AppointmentDetail', { appointment: cita, isDoctor: true });
     } else {
       setSelectedCita(cita);
@@ -108,13 +127,9 @@ export const AppointmentSearch = () => {
     }
   };
 
-  useEffect(() => {
-    consultAPI(1, '');
-  }, [consultAPI]);
-
   const handleReprogram = () => {
     if (selectedCita) {
-      navigation.navigate('AppointmentDetail', { appointment: selectedCita, isDoctor: false });
+      navigation.navigate('AppointmentDetail', { appointment: selectedCita, isDoctor: isDoctor });
       setModalVisible(false);
     } else {
       console.error("selectedCita es null, no se puede reprogramar la cita");
@@ -156,6 +171,7 @@ export const AppointmentSearch = () => {
 
       if (response.status === 200) {
         Alert.alert('Success', 'Cita cancelada correctamente.');
+        fetchAppointments(); 
       } else {
         Alert.alert('Error', 'No se pudo cancelar la cita.');
       }
@@ -186,66 +202,73 @@ export const AppointmentSearch = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => navigation.navigate('Search')}
-          style={{ marginRight: 10 }}
-        >
-          <Text style={{ fontSize: 40, fontWeight: 'bold', color: globalColors.primary }}>+</Text>
-        </TouchableOpacity>
-      ),
+      headerRight: () => {
+        if (!isDoctor) {
+          return (
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Search')}
+              style={{ marginRight: 10 }}
+            >
+              <Text style={{ fontSize: 40, fontWeight: 'bold', color: globalColors.primary }}>+</Text>
+            </TouchableOpacity>
+          );
+        }
+        return null; // Devolver null si isDoctor es true para ocultar el componente
+      },
     });
-  }, [navigation]);
+  }, [navigation, isDoctor]);
+  
 
   return (
+    <PaperProvider>
+      <View style={globalStyles.containerCitasScreen}>
+        <Text style={globalStyles.welcomeText}>
+          Bienvenido <Text style={[globalStyles.welcomeText, { color: globalColors.secondary }]}></Text> a tus citas.
+        </Text>
 
-    <View style={globalStyles.containerCitasScreen}>
-      <Text style={globalStyles.welcomeText}>
-        Bienvenido <Text style={[globalStyles.welcomeText, { color: globalColors.secondary }]}>Pedro Pablo Celada</Text> a tus citas.
-      </Text>
+        <Searchbar
+          placeholder="Buscar nombre de Doctor"
+          onChangeText={handleSearch}
+          value={searchQuery}
+          icon={'Search'}
+          style={globalStyles.searchbar}
+        />
 
-      <Searchbar
-        placeholder="Buscar cita por fecha"
-        onChangeText={setSearchQuery}
-        value={searchQuery}
-        icon={'search'}
-        style={globalStyles.searchbar}
-      />
-
-      {loading ? (
-        <View style={globalStyles.loadingContainer}>
-          <ActivityIndicator size="large" color={globalColors.primary} />
-          <Text style={globalStyles.loadingText}>Cargando...</Text>
-        </View>
-      ) : (
-        
-        <ScrollView style={globalStyles.scrollView}>
-          {citas.map((cita) => (
-            <TouchableOpacity
-              key={cita.id}
-              style={globalStyles.cardContainer}
-              onPress={() => handlePressCita(cita)}
-            >
-              <View style={globalStyles.cardContent}>
-                <Image
-                  source={getStatusImage(cita.is_active_display)}
-                  style={globalStyles.imageEstadoCita}
-                />
-                <View style={globalStyles.cardTextContainer}>
-                  <View style={[{ marginLeft: 10 }]}>
-                    <Text style={globalStyles.doctorName}>{`${cita.doctor.name} ${cita.doctor.last_name}`}</Text>
-                    <Text style={globalStyles.speciality}>{`${cita.date} ${cita.time}`}</Text>
-                    <Text style={[globalStyles.phone, { marginLeft: 5, color: globalColors.black }]}>{cita.observation}</Text>
-                    <Text style={[globalStyles.phone, { marginLeft: 5, color: globalColors.black }]}>{cita.is_active_display}</Text>
+        {loading ? (
+          <View style={globalStyles.loadingContainer}>
+            <ActivityIndicator size="large" color={globalColors.primary} />
+            <Text style={globalStyles.loadingText}>Cargando...</Text>
+          </View>
+        ) : (
+          <ScrollView style={globalStyles.scrollView}>
+            {citas.map((cita) => (
+              <TouchableOpacity
+                key={cita.id}
+                style={globalStyles.cardContainer}
+                onPress={() => handlePressCita(cita)}
+              >
+                <View style={globalStyles.cardContent}>
+                  <Image
+                    source={getStatusImage(cita.is_active_display)}
+                    style={globalStyles.imageEstadoCita}
+                  />
+                  <View style={globalStyles.cardTextContainer}>
+                    <View style={[{ marginLeft: 10 }]}>
+                      <Text style={globalStyles.doctorName}>{`${cita.doctor.name} ${cita.doctor.last_name}`}</Text>
+                      <Text style={globalStyles.speciality}>{`${cita.date} ${cita.time}`}</Text>
+                      <Text style={[globalStyles.phone, { marginLeft: 5, color: globalColors.black }]}>{cita.observation}</Text>
+                      <Text style={[globalStyles.phone, { marginLeft: 5, color: globalColors.black }]}>{cita.is_active_display}</Text>
+                    </View>
                   </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        )}
+        
         <Portal>
           <Modal visible={modalVisible} onDismiss={() => setModalVisible(false)} contentContainerStyle={globalStyles.modalContainer}>
-            <Text style={[globalStyles.welcomeText, {color: globalColors.secondary}]}>Selecciona una opción</Text>
+            <Text style={[globalStyles.welcomeText, {color: globalColors.white}]}>Selecciona una opción</Text>
             <Button mode="contained" onPress={handleReprogram} style={[globalStyles.modalButton, {backgroundColor: globalColors.primary}]}>
               Reprogramar Cita
             </Button>
@@ -257,11 +280,10 @@ export const AppointmentSearch = () => {
             </Button>
           </Modal>
         </Portal>
+        
+        <FlashMessage position="top" />
       </View>
     </PaperProvider>
-      )}
-      <FlashMessage position="top" />
-    </View>
   );
 };
 
