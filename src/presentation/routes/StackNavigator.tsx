@@ -33,7 +33,7 @@ const initialAppointment = {
 
 export const StackNavigator = () => {
   return (
-    <Stack.Navigator initialRouteName="Search">
+    <Stack.Navigator initialRouteName="GetStarted">
     <Stack.Screen
       name="Welcome"
       component={WelcomeScreen}
